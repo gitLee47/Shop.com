@@ -12,8 +12,11 @@ storeApp.controller('authCtrl', function ($scope, $rootScope, $routeParams, $loc
             }
         });
     };
-    $scope.signup = {email:'',password:'',name:'',phone:'',address:''};
+    $scope.signup = {email:'',password:'',name:'',phone:'',street:'', bldgnumber:'', city:'', state:'', country:'', zip:''};
     $scope.signUp = function (customer) {
+		customer.logintypeid = "1";
+		customer.addresstypeid = "1";
+		customer.custtypeid = "1";
         Data.post('signUp', {
             customer: customer
         }).then(function (results) {

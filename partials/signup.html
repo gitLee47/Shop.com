@@ -51,9 +51,9 @@
                             <div class="form-group">
                                 <label class="col-sm-5 control-label no-padding-right" for="name">Name</label>
                                 <div class="col-sm-7">
-                                    <span class="block input-icon input-icon-right">
+                                <span class="block input-icon input-icon-right">
                                 <input type="text" class="form-control" placeholder="Name" ng-model="signup.name" />
-                            </span>
+								</span>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -64,13 +64,44 @@
                             </span>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label class="col-sm-5 control-label no-padding-right" for="address">Address</label>
-                                <div class="col-sm-7">
-                                    <span class="block input-icon input-icon-right">
-                                <input type="text" class="form-control" placeholder="Address" ng-model="signup.address" />
-                            </span>
-                                </div>
+							<div class="form-group">
+                                <label class="col-sm-5 control-label no-padding-right" for="address">Address Line 1</label>
+                                <div class="col-sm-4">
+								<span class="block input-icon input-icon-right">
+                                <input type="text" class="form-control" placeholder="Street" ng-model="signup.street" />
+								</span>
+								</div>
+								<div class="col-sm-3">
+								<span class="block input-icon input-icon-right">
+                                <input type="text" class="form-control" placeholder="Apt/Bldg" ng-model="signup.bldgnumber" />
+								</span>
+								</div>
+                            </div>
+							<div class="form-group">
+                                <label class="col-sm-5 control-label no-padding-right" for="address">Address Line 2</label>
+                                <div class="col-sm-3">
+								<span class="block input-icon input-icon-right">
+                                <input type="text" class="form-control" placeholder="city" ng-model="signup.city" />
+								</span>
+								</div>
+								<div class="col-sm-4">
+								<span class="block input-icon input-icon-right">
+                                <input type="text" class="form-control" placeholder="state" ng-model="signup.state" />
+								</span>
+								</div>
+                            </div>
+							<div class="form-group">
+                                <label class="col-sm-5 control-label no-padding-right" for="address">Address Line 3</label>
+                                <div class="col-sm-4">
+								<span class="block input-icon input-icon-right">
+                                <input type="text" class="form-control" placeholder="country" ng-model="signup.country" />
+								</span>
+								</div>
+								<div class="col-sm-3">
+								<span class="block input-icon input-icon-right">
+                                <input type="text" class="form-control" placeholder="zip" ng-model="signup.postalcode" />
+								</span>
+								</div>
                             </div>
                             <div class="form-group">
                                 <span class="lbl col-sm-5"> </span>

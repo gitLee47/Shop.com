@@ -39,12 +39,17 @@
     <div class="container-fluid">
         <div class="row-fluid">
             <div class="span10 offset1">
-                <h1 class="well" >
+			<div class ="well">
+                <h1 >
                     <a href="default.htm">
                         <img src="img/logo.png" height="60" width="60" alt="logo"/>
                     </a>
-                    Your Basket 
+                    Your Basket
+					
                 </h1>
+				<div ng-controller="authCtrl"  class="pull-right">Welcome {{name}} and {{loggedin}}!! <a class="info" ng-click="logout();"> (Logout)</a></div>
+				
+			</div>
                 <div ng-view></div>
             </div>
         </div>

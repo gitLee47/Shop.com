@@ -49,12 +49,16 @@ storeApp.config(['$routeProvider', function($routeProvider) {
         $rootScope.$on("$routeChangeStart", function (event, next, current) {
             $rootScope.authenticated = false;
             Data.get('session').then(function (results) {
+				console.log(results.uid);
                 if (results.uid) {
+					console.log(results.uid);
                     $rootScope.authenticated = true;
                     $rootScope.uid = results.uid;
                     $rootScope.name = results.name;
                     $rootScope.email = results.email;
+					//$location.path(next.$$route.originalPath);
                 } else {
+					
                     var nextUrl = next.$$route.originalPath;
                     if (nextUrl == '/signup' || nextUrl == '/login') {
 

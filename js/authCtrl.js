@@ -31,5 +31,5 @@ storeApp.controller('authCtrl', function ($scope, $rootScope, $routeParams, $loc
             Data.toast(results);
             $location.path('login');
         });
-    }
+    };
 });

@@ -49,16 +49,19 @@ class DbHandler {
 /*New Functions */
 
 function select($table, $columns, $where){
+		
         try{
             $a = array();
             $w = "";
             foreach ($where as $key => $value) {
-                $w .= " and " .$key. " like :".$key;
+                $w .= " and " .$key. " like '".$value."'";
                 $a[":".$key] = $value;
             }
-            $stmt = $this->db->prepare("select ".$columns." from ".$table." where 1=1 ". $w);
-            $stmt->execute($a);
-            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			///$query = "select productid,sku,productname,description,price from products_new";
+			$query = "select ".$columns." from ".$table." where 1=1 ". $w;
+			
+			$r = $this->conn->query($query) or die($this->conn->error.__LINE__);
+			$rows = $r->fetch_all(MYSQLI_ASSOC); 
             if(count($rows)<=0){
                 $response["status"] = "warning";
                 $response["message"] = "No data found.";

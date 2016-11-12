@@ -1,6 +1,6 @@
 ﻿<p class="text-info">
-    <img ng-src="img/products/{{product.sku}}.jpg" alt="{{product.name}}"/>
-    {{product.name}}: {{product.description}}<br />
+    <img ng-src="img/products/{{product.sku}}.jpg" alt="{{product.productname}}"/>
+    {{product.productname}}: {{product.description}}<br />
 </p>
 
 <div class="container-fluid">
@@ -12,7 +12,7 @@
 
                 <tr class="well">
                     <td class="tdRight" colspan="3" >
-                        <a href="default.htm#/cart" title="go to shopping cart" ng-disabled="cart.getTotalCount() < 1">
+                        <a href="default.html#/cart" title="go to shopping cart" ng-disabled="cart.getTotalCount() < 1">
                             <i class="icon-shopping-cart" />
                             <b>{{cart.getTotalCount()}}</b> items, <b>{{cart.getTotalPrice() | currency}}</b>
                             <span ng-show="cart.getTotalCount(product.sku) > 0"><br />this item is in the cart</span>
@@ -37,7 +37,7 @@
 
                 <tr class="well">
                     <td class="tdRight" colspan="3" >
-                        <a href="default.htm#/cart" title="go to shopping cart" ng-disabled="cart.getTotalCount() < 1">
+                        <a href="default.html#/cart" title="go to shopping cart" ng-disabled="cart.getTotalCount() < 1">
                             <i class="icon-shopping-cart" />
                             <b>{{cart.getTotalCount()}}</b> items, <b>{{cart.getTotalPrice() | currency}}</b>
                             <span ng-show="cart.getTotalCount(product.sku) > 0"><br />this item is in the cart</span>
@@ -63,7 +63,7 @@
             </button>
             <button 
                 class="btn btn-block" 
-                onclick="window.location.href=''">
+                onclick="window.location.href='default.html#/store'">
                 <i class="icon-chevron-left" /> back to store
             </button>
         </div>

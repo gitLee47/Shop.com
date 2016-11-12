@@ -1,6 +1,7 @@
 <?php 
 
 $app->get('/session', function() {
+	
     $db = new DbHandler();
     $session = $db->getSession();
     $response["uid"] = $session['uid'];
@@ -149,4 +150,20 @@ $app->get('/logout', function() {
 	$_SESSION['loggedin'] = "false";
     echoResponse(200, $response);
 });
+
+// Products
+$app->get('/store', function() { 
+
+    $db = new DbHandler();
+    $rows = $db->select("products_new","productid,sku,productname,description,price",array());
+    echoResponse(200, $rows);
+});
+
+$app->get('/product/:id', function($id) {
+	
+    $db = new DbHandler();
+    $rows = $db->select("products_new","productid,sku,productname,description,price,stock,color,cal,carot,itc,folate,potassium,fiber", array('sku'=>$id));
+    echoResponse(200, $rows);
+});
+
 ?>

@@ -10,11 +10,26 @@
 
 <table class="table table-bordered">
     <tr class="well">
-        <td class="tdRight" colspan="4" >
-            <a href="default.htm#/cart" title="go to shopping cart" ng-disabled="cart.getTotalCount() < 1">
+        <td class="tdRight" colspan="5" >
+            <a href="default.html#/cart" title="go to shopping cart" ng-disabled="cart.getTotalCount() < 1">
                 <i class="icon-shopping-cart" />
                 <b>{{cart.getTotalCount()}}</b> items, <b>{{cart.getTotalPrice() | currency}}</b>
             </a>
+        </td>
+    </tr>
+	<tr class="well">
+        <td class="tdCenter"><b>Item Image</b></td>
+        <td>
+            <b>Description (Click for more details)</b>
+        </td>
+		<td>
+            <b>Stock Left(in kg)</b>
+        </td>
+        <td class="tdRight">
+            <b>Price</b>
+        </td>
+        <td class="tdCenter">
+            <b>Click to Add</b>
         </td>
     </tr>
     <tr ng-repeat="product in products | orderBy:'name' | filter:search" >
@@ -23,18 +38,21 @@
             <a href="#/products/{{product.sku}}"><b>{{product.productname}}</b></a><br />
             {{product.description}}
         </td>
+		<td>
+            {{product.stock}} kg
+        </td>
         <td class="tdRight">
             {{product.price | currency}}
         </td>
         <td class="tdCenter">
-            <a href="" ng-click="cart.addItem(product.sku, product.name, product.price, 1)">
-                add to cart
+            <a href="" ng-click="product.stock = product.stock - 1;cart.addItem(product.sku, product.productname, product.price, 1, customer.custid)">
+                add to cart {{customer.custid}}
             </a>
         </td>
     </tr>
     <tr class="well">
-        <td class="tdRight" colspan="4">
-            <a href="default.htm#/cart" title="go to shopping cart" ng-disabled="cart.getTotalCount() < 1">
+        <td class="tdRight" colspan="5">
+            <a href="default.html#/cart" title="go to shopping cart" ng-disabled="cart.getTotalCount() < 1">
                 <i class="icon-shopping-cart" />
                 <b>{{cart.getTotalCount()}}</b> items, <b>{{cart.getTotalPrice() | currency}}</b>
             </a>

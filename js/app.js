@@ -6,15 +6,15 @@ storeApp.config(['$routeProvider', function($routeProvider) {
   $routeProvider.
 		when('/store', {
         templateUrl: 'partials/store.htm',
-        controller: storeController 
+        controller: 'storeController' 
 		}).
 		when('/products/:productSku', {
         templateUrl: 'partials/product.htm',
-        controller: storeController
+        controller: 'storeController'
 		}).
 		when('/cart', {
         templateUrl: 'partials/shoppingCart.htm',
-        controller: storeController
+        controller: 'storeController'
 		}).
 		when('/login', {
             title: 'Login',
@@ -49,9 +49,9 @@ storeApp.config(['$routeProvider', function($routeProvider) {
         $rootScope.$on("$routeChangeStart", function (event, next, current) {
             $rootScope.authenticated = false;
             Data.get('session').then(function (results) {
-				console.log(results.uid);
+				//console.log(results.uid);
                 if (results.uid) {
-					console.log(results.uid);
+					//console.log(results.uid);
                     $rootScope.authenticated = true;
                     $rootScope.uid = results.uid;
                     $rootScope.name = results.name;
@@ -72,13 +72,13 @@ storeApp.config(['$routeProvider', function($routeProvider) {
 
 // create a data service that provides a store and a shopping cart that
 // will be shared by all views (instead of creating fresh ones for each view).
-storeApp.factory("DataService", function () {
+storeApp.factory("DataService", function (shoppingCartService) {
 
     // create store
     var myStore = new store();
 
     // create shopping cart
-    var myCart = new shoppingCart("AngularStore");
+    var myCart = new shoppingCartService.shoppingCart("AngularStore");
 
     // enable PayPal checkout
     // note: the second parameter identifies the merchant; in order to use the 

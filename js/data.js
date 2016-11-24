@@ -7,6 +7,9 @@ storeApp.factory("Data", ['$http', 'toaster',
         obj.toast = function (data) {
             toaster.pop(data.status, "", data.message, 10000, 'trustedHtml');
         }
+		obj.showOrderDetails = function (data) {
+            window.alert("hi!");
+        }
         obj.get = function (q) {
 			//console.log(q);
             return $http.get(serviceBase + q).then(function (results) {

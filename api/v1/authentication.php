@@ -172,18 +172,22 @@ $app->post('/order', function() use ($app) {
     $db = new DbHandler();
 	
 	//$dataSet = json_decode($r->order); 
-	$prod = "";
-	$column_names = array('custid', 'productid', 'quantity', 'total');
-	$table_name = "orders";
+	$quant = "";
 	foreach($r->order as $obj){
-		
+		$column_names = array('custid', 'productid', 'quantity', 'total');
+		$table_name = "orders";
 		$sku = $obj->item_number;
-		$productid = $db->getOneRecord("select productid from products_new where sku='$sku'");
-		$prod = $prod.$productid['productid'];
-		$obj -> productid =  $prod;
-		$result_customer = $db->insertIntoTable($obj, $column_names, $table_name);
+		$product = $db->getOneRecord("select productid, stock from products_new where sku='$sku'");
+		$obj -> productid =  $product['productid'];
+		$result_order = $db->insertIntoTable($obj, $column_names, $table_name);
+		if($result_order != null){
+			$table_name = "products_new";
+			$stock = $product['stock'] - $obj -> quantity;
+			$prodid = $product['productid'];
+			$result_update_product = $db->update($table_name, array('stock'=>$stock ),array('productid'=>$prodid));
+		}
 	}
-	echoResponse(200, "Inserted successfully");
+	echoResponse(200, $result_update_product);
 	/*
     $phone = $r->customer->phone;
     $name = $r->customer->name;

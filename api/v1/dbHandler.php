@@ -134,33 +134,40 @@ function select($table, $columns, $where){
         return $response;
     }
 	
-    function update($table, $columnsArray, $where, $requiredColumnsArray){ 
-        $this->verifyRequiredParams($columnsArray, $requiredColumnsArray);
+    function update($table, $columnsArray, $where){ 
+       // $this->verifyRequiredParams($columnsArray);
         try{
             $a = array();
             $w = "";
             $c = "";
+			
             foreach ($where as $key => $value) {
-                $w .= " and " .$key. " = :".$key;
+                $w .= " and " .$key. " = ".$value;
                 $a[":".$key] = $value;
             }
+			
             foreach ($columnsArray as $key => $value) {
-                $c .= $key. " = :".$key.", ";
+                $c .= $key. " = ".$value.", ";
                 $a[":".$key] = $value;
             }
                 $c = rtrim($c,", ");
 
-            $stmt =  $this->db->prepare("UPDATE $table SET $c WHERE 1=1 ".$w);
-            $stmt->execute($a);
-            $affected_rows = $stmt->rowCount();
-            if($affected_rows<=0){
-                $response["status"] = "warning";
-                $response["message"] = "No row updated";
-            }else{
-                $response["status"] = "success";
-                $response["message"] = $affected_rows." row(s) updated in database";
-            }
-        }catch(PDOException $e){
+			$query = "UPDATE $table SET $c WHERE 1=1 ".$w;
+			
+			$r = $this->conn->query($query) or die($this->conn->error.__LINE__);
+		
+			if ($r) {
+				$new_row_id = $this->conn->affected_rows;
+				$response["status"] = "success";
+                //$response["message"] = $new_row_id." row(s) updated in database";	
+				$response["message"] = "Congratulations!! your order has been placed!!";	
+            } 
+			else {
+				$response["status"] = "warning";
+				$response["message"] = "Sorry! your order was not placed!";
+			}
+			
+        }catch(Exception $e){
             $response["status"] = "error";
             $response["message"] = "Update Failed: " .$e->getMessage();
         }

@@ -1,7 +1,7 @@
 ﻿//----------------------------------------------------------------
 // shopping cart
 //
-storeApp.factory("shoppingCartService", function(Data) {
+storeApp.factory("shoppingCartService", function($location, Data) {
 var obj = {};
 
 obj.shoppingCart = function shoppingCart(cartName) {
@@ -184,6 +184,7 @@ obj.shoppingCart.prototype.checkoutMySQL = function (parms, clearCart) {
             order: data
         }).then(function (results) {
             Data.toast(results);
+			Data.showOrderDetails(results);
             if (results.status == "success") {
                 $location.path('store');
             }

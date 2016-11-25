@@ -70,7 +70,7 @@ function select($table, $columns, $where){
                 $response["message"] = "Data selected from database";
             }
                 $response["data"] = $rows;
-        }catch(PDOException $e){
+        }catch(Exception $e){
             $response["status"] = "error";
             $response["message"] = 'Select Failed: ' .$e->getMessage();
             $response["data"] = null;
@@ -126,7 +126,7 @@ function select($table, $columns, $where){
             $response["status"] = "success";
             $response["message"] = $affected_rows." row inserted into database";
             $response["data"] = $lastInsertId;
-        }catch(PDOException $e){
+        }catch(Exception $e){
             $response["status"] = "error";
             $response["message"] = 'Insert Failed: ' .$e->getMessage();
             $response["data"] = 0;
@@ -147,11 +147,11 @@ function select($table, $columns, $where){
             }
 			
             foreach ($columnsArray as $key => $value) {
-                $c .= $key. " = ".$value.", ";
+                $c .= $key. " = '".$value."', ";
                 $a[":".$key] = $value;
             }
                 $c = rtrim($c,", ");
-
+			
 			$query = "UPDATE $table SET $c WHERE 1=1 ".$w;
 			
 			$r = $this->conn->query($query) or die($this->conn->error.__LINE__);
@@ -171,6 +171,7 @@ function select($table, $columns, $where){
             $response["status"] = "error";
             $response["message"] = "Update Failed: " .$e->getMessage();
         }
+		
         return $response;
     }
 	
@@ -196,7 +197,7 @@ function select($table, $columns, $where){
                     $response["status"] = "success";
                     $response["message"] = $affected_rows." row(s) deleted from database";
                 }
-            }catch(PDOException $e){
+            }catch(Exception $e){
                 $response["status"] = "error";
                 $response["message"] = 'Delete Failed: ' .$e->getMessage();
             }

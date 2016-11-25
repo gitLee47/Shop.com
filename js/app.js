@@ -1,20 +1,20 @@
 'use strict';
-var storeApp = angular.module('AngularStore', ['ngRoute', 'ngAnimate', 'toaster']);
+var storeApp = angular.module('AngularStore', ['ngRoute','ui.bootstrap', 'ngAnimate', 'toaster']);
 // App Module: the name AngularStore matches the ng-app attribute in the main <html> tag
 // the route provides parses the URL and injects the appropriate partial page
 storeApp.config(['$routeProvider', function($routeProvider) {
   $routeProvider.
 		when('/store', {
-        templateUrl: 'partials/store.htm',
-        controller: 'storeController' 
+			templateUrl: 'partials/store.htm',
+			controller: 'storeController' 
 		}).
 		when('/products/:productSku', {
-        templateUrl: 'partials/product.htm',
-        controller: 'storeController'
+			templateUrl: 'partials/product.htm',
+			controller: 'storeController'
 		}).
 		when('/cart', {
-        templateUrl: 'partials/shoppingCart.htm',
-        controller: 'storeController'
+			templateUrl: 'partials/shoppingCart.htm',
+			controller: 'storeController'
 		}).
 		when('/login', {
             title: 'Login',
@@ -22,29 +22,34 @@ storeApp.config(['$routeProvider', function($routeProvider) {
             controller: 'authCtrl'
         }).
 		when('/logout', {
-                title: 'Logout',
-                templateUrl: 'partials/login.html',
-                controller: 'logoutCtrl'
+            title: 'Logout',
+			templateUrl: 'partials/login.html',
+			controller: 'logoutCtrl'
         }).
 		when('/signup', {
-                title: 'Signup',
-                templateUrl: 'partials/signup.html',
-                controller: 'authCtrl'
-            }).
+			title: 'Signup',
+			templateUrl: 'partials/signup.html',
+			controller: 'authCtrl'
+        }).
 		when('/dashboard', {
-                title: 'Dashboard',
-                templateUrl: 'partials/dashboard.html',
-                controller: 'authCtrl'
-            }).
+			title: 'Dashboard',
+			templateUrl: 'partials/dashboard.html',
+			controller: 'authCtrl'
+        }).
 		when('/', {
-                title: 'Login',
-                templateUrl: 'partials/login.html',
-                controller: 'authCtrl',
-                role: '0'
-            }).
-      otherwise({
-        redirectTo: '/login'
-      });
+			title: 'Login',
+			templateUrl: 'partials/login.html',
+			controller: 'authCtrl',
+			role: '0'
+        }).
+		when('/productmanager', {
+			title: 'Products',
+			templateUrl: 'partials/products.html',
+			controller: 'productsCtrl'
+		}).
+        otherwise({
+			redirectTo: '/login'
+		});
 }]).run(function ($rootScope, $location, Data) {
         $rootScope.$on("$routeChangeStart", function (event, next, current) {
             $rootScope.authenticated = false;

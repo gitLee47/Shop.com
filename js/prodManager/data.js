@@ -11,22 +11,23 @@ storeApp.factory("Data", ['$http', 'toaster',
             window.alert("hi!");
         }
         obj.get = function (q) {
-			console.log(q);
+			//console.log(q);
             return $http.get(serviceBase + q).then(function (results) {
-				console.log(results);
+				//console.log(results);
                 return results.data;
             });
         };
         obj.post = function (q, object) {
-			console.log(object)
+			//console.log(object);
             return $http.post(serviceBase + q, object).then(function (results) {
-				console.log(results.data);
+				//console.log(results.data);
                 return results.data;
             });
         };
         obj.put = function (q, object) {
-			console.log(q);
+			//console.log(object);
             return $http.put(serviceBase + q, object).then(function (results) {
+				console.log(results);
                 return results.data;
             });
         };

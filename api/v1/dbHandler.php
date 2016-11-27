@@ -184,19 +184,22 @@ function select($table, $columns, $where){
                 $a = array();
                 $w = "";
                 foreach ($where as $key => $value) {
-                    $w .= " and " .$key. " = :".$key;
+                    $w .= " and " .$key. " = '".$value."'";
                     $a[":".$key] = $value;
                 }
-                $stmt =  $this->db->prepare("DELETE FROM $table WHERE 1=1 ".$w);
-                $stmt->execute($a);
-                $affected_rows = $stmt->rowCount();
-                if($affected_rows<=0){
-                    $response["status"] = "warning";
-                    $response["message"] = "No row deleted";
-                }else{
-                    $response["status"] = "success";
-                    $response["message"] = $affected_rows." row(s) deleted from database";
-                }
+                $query = "DELETE FROM $table WHERE 1=1 ".$w;
+               # $stmt->execute($a);
+               # $affected_rows = $stmt->rowCount();
+			   $r = $this->conn->query($query) or die($this->conn->error.__LINE__);
+				if ($r) {
+				$affected = $this->conn->affected_rows;
+				$response["status"] = "success";
+                $response["message"] = $affected." row(s) updated in database";		
+				} 
+				else {
+					$response["status"] = "warning";
+					$response["message"] = "No row deleted";
+				}
             }catch(Exception $e){
                 $response["status"] = "error";
                 $response["message"] = 'Delete Failed: ' .$e->getMessage();
@@ -226,6 +229,27 @@ public function getSession(){
     }
     return $sess;
 }
+
+public function getSessionProd(){
+    if (!isset($_SESSION)) {
+        session_start();
+    }
+    $sess = array();
+    if(isset($_SESSION['puid']))
+    {
+        $sess["puid"] = $_SESSION['puid'];
+        $sess["pname"] = $_SESSION['pname'];
+        $sess["pemail"] = $_SESSION['pemail'];
+    }
+    else
+    {
+        $sess["puid"] = '';
+        $sess["pname"] = 'Guest';
+        $sess["pemail"] = '';
+    }
+    return $sess;
+}
+
 public function destroySession(){
     if (!isset($_SESSION)) {
     session_start();
@@ -235,6 +259,29 @@ public function destroySession(){
         unset($_SESSION['uid']);
         unset($_SESSION['name']);
         unset($_SESSION['email']);
+        $info='info';
+        if(isSet($_COOKIE[$info]))
+        {
+            setcookie ($info, '', time() - $cookie_time);
+        }
+        $msg="Logged Out Successfully...";
+    }
+    else
+    {
+        $msg = "Not logged in...";
+    }
+    return $msg;
+}
+
+public function destroySessionProd(){
+    if (!isset($_SESSION)) {
+    session_start();
+    }
+    if(isSet($_SESSION['puid']))
+    {
+        unset($_SESSION['puid']);
+        unset($_SESSION['pname']);
+        unset($_SESSION['pemail']);
         $info='info';
         if(isSet($_COOKIE[$info]))
         {

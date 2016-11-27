@@ -20,7 +20,7 @@ storeApp.factory("Data", ['$http', 'toaster',
         obj.post = function (q, object) {
 			//console.log(object);
             return $http.post(serviceBase + q, object).then(function (results) {
-				//console.log(results.data);
+				console.log(results.data);
                 return results.data;
             });
         };
@@ -33,9 +33,9 @@ storeApp.factory("Data", ['$http', 'toaster',
         };
         obj.delete = function (q) {
             return $http.delete(serviceBase + q).then(function (results) {
+				console.log(results);
                 return results.data;
             });
         };
-
         return obj;
 }]);

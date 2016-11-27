@@ -63,7 +63,7 @@ storeApp.config(['$routeProvider', function($routeProvider) {
                     $rootScope.email = results.email;
 					//$location.path(next.$$route.originalPath);
                 } else {
-					
+					$rootScope.name = results.name;
                     var nextUrl = next.$$route.originalPath;
                     if (nextUrl == '/signup' || nextUrl == '/login') {
 

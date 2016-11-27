@@ -3,6 +3,9 @@ storeApp.controller('productsCtrl', function ($scope, $modal, $filter, Data) {
     Data.get('products').then(function(data){
         $scope.products = data.data;
     });
+	Data.get('orders').then(function(data){
+        $scope.orders = data.data;
+    });
     $scope.changeProductStatus = function(product){
         product.status = (product.status=="Active" ? "Inactive" : "Active");
         Data.put("products/"+product.productid,{status:product.status}).then(function(results){
@@ -11,8 +14,9 @@ storeApp.controller('productsCtrl', function ($scope, $modal, $filter, Data) {
     };
     $scope.deleteProduct = function(product){
         if(confirm("Are you sure to remove the product")){
-            Data.delete("products/"+product.id).then(function(result){
-                $scope.products = _.without($scope.products, _.findWhere($scope.products, {id:product.id}));
+            Data.delete("products/"+product.productid).then(function(result){
+				Data.toast(result);
+                $scope.products = _.without($scope.products, _.findWhere($scope.products, {id:product.productid}));
             });
         }
     };
@@ -40,7 +44,7 @@ storeApp.controller('productsCtrl', function ($scope, $modal, $filter, Data) {
         });
     };
     
- $scope.columns = [
+	$scope.columns = [
                     {text:"ID",predicate:"id",sortable:true,dataType:"number"},
 					{text:"ProductTypeId",predicate:"prodtypeid",sortable:true,dataType:"number"},
                     {text:"Name",predicate:"name",sortable:true},
@@ -54,6 +58,16 @@ storeApp.controller('productsCtrl', function ($scope, $modal, $filter, Data) {
 					{text:"Folates",predicate:"folates",sortable:true},
 					{text:"Potassium",predicate:"potassium",sortable:true},
                     {text:"Vitamin C",predicate:"vitaminc",sortable:true},
+                    {text:"Action",predicate:"",sortable:false}
+                ];
+
+	$scope.oColumns = [
+                    {text:"ID",predicate:"id",sortable:true,dataType:"number"},
+					{text:"CustomerID",predicate:"custid",sortable:true,dataType:"number"},
+                    {text:"ProductID",predicate:"productid",sortable:true, dataType:"number"},
+					{text:"Quantity Ordered",predicate:"quantity",reverse:true,sortable:true, dataType:"number"},
+                    {text:"Total Amount",predicate:"total",sortable:true, dataType:"number"},
+					{text:"Date Ordered",predicate:"dateordered",sortable:true},
                     {text:"Action",predicate:"",sortable:false}
                 ];
 

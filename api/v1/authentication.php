@@ -10,6 +10,16 @@ $app->get('/session', function() {
     echoResponse(200, $session);
 });
 
+$app->get('/prodsession', function() {
+	
+    $db = new DbHandler();
+    $session = $db->getSessionProd();
+    $response["puid"] = $session['puid'];
+    $response["pemail"] = $session['pemail'];
+    $response["pname"] = $session['pname'];
+    echoResponse(200, $session);
+});
+
 function console_log( $data ){
   echo '<script>';
   echo 'console.log('. json_encode( $data ) .')';
@@ -24,7 +34,7 @@ $app->post('/login', function() use ($app) {
 	$db = new DbHandler();
 	$password = $r->customer->password;
 	$email = $r->customer->email;
-	$user = $db->getOneRecord("select userid, password, email, created, logintypeid from login where phone='$email' or email='$email'");
+	$user = $db->getOneRecord("select userid, password, email, created, logintypeid from login where phone='$email' or email='$email' and logintypeid = 1");
 
     if ($user != NULL) {
 		
@@ -35,20 +45,14 @@ $app->post('/login', function() use ($app) {
 		$name = "test";
         $response['email'] = $user['email'];
         $response['createdAt'] = $user['created'];
-		
-		if($user['logintypeid'] == 1) {
-			$fulluser = $db->getOneRecord("select custid, name  from customer where userid='$uid'");
-			$name = $fulluser['name'];
-			$response['custid'] = $fulluser['custid'];
-		}
-		else if($user['logintypeid'] == 2) {
-			$fulluser = $db->getOneRecord("select employeeid, name from employee where userid='$uid'");
-			$name = $fulluser['name'];
-			$response['employeeid'] = $fulluser['employeeid'];
-		} 
+	
+		$fulluser = $db->getOneRecord("select custid, name  from customer where userid='$uid'");
+		$name = $fulluser['name'];
+		$response['custid'] = $fulluser['custid'];
 		
 		$response['uid'] = $uid;
 		$response['name'] = $name;
+		$response['logintypeid'] = $user['logintypeid'];
         if (!isset($_SESSION)) {
             session_start();
         }
@@ -56,12 +60,10 @@ $app->post('/login', function() use ($app) {
 		if($response['custid'] != NULL) {
 			$_SESSION['custid'] = $response['custid'];
 		}
-		else if($response['employeeid'] != NULL) {
-			$_SESSION['employeeid'] = $response['employeeid']; 
-		}
+		
         $_SESSION['email'] = $email;
         $_SESSION['name'] = $name;
-		$_SESSION['loggedin'] = "hi";
+		$_SESSION['logintypeid'] = $user['logintypeid'];
         } else {
             $response['status'] = "error";
             $response['message'] = 'Login failed. Incorrect credentials';
@@ -72,6 +74,59 @@ $app->post('/login', function() use ($app) {
         } 
     echoResponse(200, $response);
 });
+$app->post('/prodLogin', function() use ($app) {
+    require_once 'passwordHash.php';
+	$r = json_decode($app->request->getBody());
+    verifyRequiredParams(array('email', 'password'),$r->customer);
+    $response = array();
+	$db = new DbHandler();
+	$password = $r->customer->password;
+	$email = $r->customer->email;
+	$user = $db->getOneRecord("select userid, password, email, created, logintypeid from login where phone='$email' or email='$email' and logintypeid = 2");
+
+    if ($user != NULL) {
+        if($user['password'] == $password){
+			$response['status'] = "success";
+			$response['message'] = 'Logged in successfully.';
+			$uid= $user['userid'];
+			$name = "test";
+			$response['email'] = $user['email'];
+			$response['createdAt'] = $user['created'];
+	
+			$fulluser = $db->getOneRecord("select employeeid, name from employee where userid='$uid'");
+			$name = $fulluser['name'];
+			$response['employeeid'] = $fulluser['employeeid'];
+
+			$response['uid'] = $uid;
+			$response['name'] = $name;
+			$response['logintypeid'] = $user['logintypeid'];
+			
+			if (!isset($_SESSION)) {
+				session_start();
+			}
+			
+			$_SESSION['puid'] = $uid;
+			
+			if($response['employeeid'] != NULL) {
+				$_SESSION['employeeid'] = $response['employeeid']; 
+			}
+			
+			$_SESSION['pemail'] = $email;
+			$_SESSION['pname'] = $name;
+			$_SESSION['plogintypeid'] = $user['logintypeid']; 
+        } 
+		else {
+            $response['status'] = "error";
+            $response['message'] = 'Login failed. Incorrect credentials';
+        }
+    }
+	else {
+		$response['status'] = "error";
+		$response['message'] = 'No such user is registered';
+    } 
+    echoResponse(200, $response);
+});
+
 $app->post('/signUp', function() use ($app) {
     $response = array();
     $r = json_decode($app->request->getBody());
@@ -147,7 +202,19 @@ $app->get('/logout', function() {
 	if (!isset($_SESSION)) {
             session_start();
     }
-	$_SESSION['loggedin'] = "false";
+	$_SESSION['custloggedin'] = "false";
+    echoResponse(200, $response);
+});
+
+$app->get('/logoutProd', function() {
+    $db = new DbHandler();
+    $session = $db->destroySessionProd();
+    $response["status"] = "info";
+    $response["message"] = "Logged out successfully";
+	if (!isset($_SESSION)) {
+            session_start();
+    }
+	$_SESSION['emploggedin'] = "false";
     echoResponse(200, $response);
 });
 
@@ -222,10 +289,18 @@ $app->put('/products/:id', function($id) use ($app) {
 });
 
 $app->delete('/products/:id', function($id) { 
-    global $db;
-    $rows = $db->delete("products", array('id'=>$id));
+    $db = new DbHandler();
+    $rows = $db->delete("products_new", array('productid'=>$id));
     if($rows["status"]=="success")
         $rows["message"] = "Product removed successfully.";
+    echoResponse(200, $rows);
+});
+
+//Orders Tab
+
+$app->get('/orders', function() { 
+	$db = new DbHandler();
+	$rows = $db->select("orders","orderid,custid,productid,quantity,total,dateordered",array());
     echoResponse(200, $rows);
 });
 ?>

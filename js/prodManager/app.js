@@ -16,9 +16,24 @@ storeApp.config(['$routeProvider', function($routeProvider) {
         }).
 		when('/', {
 			title: 'Login',
-			templateUrl: 'partials/login.html',
+			templateUrl: 'partials/backendLogin.html',
 			controller: 'authCtrl',
 			role: '0'
+        }).
+		when('/console', {
+			title: 'Console',
+			templateUrl: 'partials/consoleBackend.html',
+			controller: 'productsCtrl'
+        }).
+		when('/Inventory', {
+			title: 'Console',
+			templateUrl: 'partials/consoleBackend.html',
+			controller: 'productsCtrl'
+        }).
+		when('/Orders', {
+			title: 'Console',
+			templateUrl: 'partials/consoleBackend.html',
+			controller: 'productsCtrl'
         }).
 		when('/productmanager', {
 			title: 'Products',
@@ -31,17 +46,16 @@ storeApp.config(['$routeProvider', function($routeProvider) {
 }]).run(function ($rootScope, $location, Data) {
         $rootScope.$on("$routeChangeStart", function (event, next, current) {
             $rootScope.authenticated = false;
-            Data.get('session').then(function (results) {
-				//console.log(results.uid);
-                if (results.uid) {
-					//console.log(results.uid);
+            Data.get('prodsession').then(function (results) {
+				//console.log(results);
+                if (results.puid) {
                     $rootScope.authenticated = true;
-                    $rootScope.uid = results.uid;
-                    $rootScope.name = results.name;
-                    $rootScope.email = results.email;
+                    $rootScope.uid = results.puid;
+                    $rootScope.name = results.pname;
+                    $rootScope.email = results.pemail;
 					//$location.path(next.$$route.originalPath);
                 } else {
-					
+					$rootScope.name = results.pname;
                     var nextUrl = next.$$route.originalPath;
                     if (nextUrl == '/signup' || nextUrl == '/login') {
 
@@ -55,7 +69,7 @@ storeApp.config(['$routeProvider', function($routeProvider) {
 
 // create a data service that provides a store and a shopping cart that
 // will be shared by all views (instead of creating fresh ones for each view).
-storeApp.factory("DataService", function (shoppingCartService) {
+storeApp.factory("DataService", function () {
 
 
 });

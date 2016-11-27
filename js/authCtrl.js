@@ -8,7 +8,7 @@ storeApp.controller('authCtrl', function ($scope, $rootScope, $routeParams, $loc
         }).then(function (results) {
             Data.toast(results);
 			dataSharingService.addCustomer(results);
-            if (results.status == "success") {
+            if (results.status == "success" && results.logintypeid == 1) {
                 $location.path('store');
             }
         });

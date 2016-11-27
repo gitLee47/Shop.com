@@ -3,13 +3,13 @@ storeApp.controller('authCtrl', function ($scope, $rootScope, $routeParams, $loc
     $scope.login = {};
     $scope.signup = {};
     $scope.doLogin = function (customer) {
-        Data.post('login', {
+        Data.post('prodLogin', {
             customer: customer
         }).then(function (results) {
-            Data.toast(results);
+			Data.toast(results);
 			dataSharingService.addCustomer(results);
             if (results.status == "success") {
-                $location.path('productmanager');
+                $location.path('console');
             }
         });
     };
@@ -29,7 +29,7 @@ storeApp.controller('authCtrl', function ($scope, $rootScope, $routeParams, $loc
     };
     $scope.logout = function () {
 		sessionStorage.setItem('customer', null);
-        Data.get('logout').then(function (results) {
+        Data.get('logoutProd').then(function (results) {
             Data.toast(results);
             $location.path('login');
         });

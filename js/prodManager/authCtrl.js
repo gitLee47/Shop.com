@@ -28,7 +28,11 @@ storeApp.controller('authCtrl', function ($scope, $rootScope, $routeParams, $loc
         });
     };
     $scope.logout = function () {
-		sessionStorage.setItem('customer', null);
+		sessionStorage.setItem('prodlogin', "null");
+		//localStorage.clear();
+		//console.log("sessionVal1:"+ sessionStorage.getItem('prodlogin'));
+		//sessionStorage.clear();
+		//console.log("sessionVal2:"+ sessionStorage.getItem('prodlogin'));
         Data.get('logoutProd').then(function (results) {
             Data.toast(results);
             $location.path('login');

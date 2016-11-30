@@ -41,16 +41,26 @@
                             </span>
                         </div>
                     </div>
+					
+					<div class="form-group">
+                        <label class="col-sm-3 control-label no-padding-right" for="password"> Login As </label>
+						<div class="col-sm-7">
+							<label class="radio-inline"><input type="radio" name='group' ng-model="login.type" value="2" required>Sales Person</label>
+							<label class="radio-inline"><input type="radio" name='group' ng-model="login.type" value="3" required>Manager</label>
+							<label class="radio-inline"><input type="radio" name='group' ng-model="login.type" value="4" required>Admin</label>
+						</div>
+                    </div>
+					
                     <div class="space"></div>
                      <div class="clearfix">
-                                                        <div class="row">
+                        <div class="row">
                          <label class="col-sm-3 control-label no-padding-right"> </label>
                         <div class="col-sm-7">
                             <button type="submit" class="width-35 pull-right btn btn-sm btn-primary" ng-click="doLogin(login)" data-ng-disabled="loginForm.$invalid">
                                 <i class="ace-icon fa fa-key"></i>
                                 Login
                             </button>
-                                                            </div>
+						</div>
                         </div>
                     </div>
                         <div class="space-4"></div>

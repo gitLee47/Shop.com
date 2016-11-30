@@ -82,37 +82,39 @@ $app->post('/prodLogin', function() use ($app) {
 	$db = new DbHandler();
 	$password = $r->customer->password;
 	$email = $r->customer->email;
-	$user = $db->getOneRecord("select userid, password, email, created, logintypeid from login where phone='$email' or email='$email' and logintypeid = 2");
+	$type = $r->customer->type;
+	$user = $db->getOneRecord("select userid, password, email, created, logintypeid from login where phone='$email' or email='$email' and logintypeid ='$type'");
 
     if ($user != NULL) {
         if($user['password'] == $password){
 			$response['status'] = "success";
 			$response['message'] = 'Logged in successfully.';
 			$uid= $user['userid'];
-			$name = "test";
 			$response['email'] = $user['email'];
 			$response['createdAt'] = $user['created'];
 	
-			$fulluser = $db->getOneRecord("select employeeid, name from employee where userid='$uid'");
-			$name = $fulluser['name'];
+			$fulluser = $db->getOneRecord("select employeeid, name, storeid from employee where employeeid='$uid'");
 			$response['employeeid'] = $fulluser['employeeid'];
-
 			$response['uid'] = $uid;
-			$response['name'] = $name;
+			$response['name'] = $fulluser['name'];
 			$response['logintypeid'] = $user['logintypeid'];
+			$response['storeid'] = $fulluser['storeid'];
+			$storeid = $fulluser['storeid'];
+			
+			$storeDetails = $db->getOneRecord("select producttype from store where storeid='$storeid'");
+			$response['storetype'] = $storeDetails['producttype'];
 			
 			if (!isset($_SESSION)) {
 				session_start();
 			}
 			
-			$_SESSION['puid'] = $uid;
-			
 			if($response['employeeid'] != NULL) {
 				$_SESSION['employeeid'] = $response['employeeid']; 
 			}
 			
+			$_SESSION['puid'] = $uid;
 			$_SESSION['pemail'] = $email;
-			$_SESSION['pname'] = $name;
+			$_SESSION['pname'] = $fulluser['name'];
 			$_SESSION['plogintypeid'] = $user['logintypeid']; 
         } 
 		else {
@@ -268,12 +270,18 @@ $app->post('/products', function() use ($app) {
     $data = json_decode($app->request->getBody());
     $mandatory = array('name');
     $db = new DbHandler();
-	$column_names = array('sku','productname','description','price','stock','color','cal','carot','itc','folate','potassium','fiber','status');
+	$column_names = array('sku','productname','producttypeid','description','price','stock','color','cal','carot','itc','folate','potassium','fiber','status');
 	
     $rows = $db->insertIntoTable($data, $column_names, "products_new");
     if($rows["status"]=="success")
         $rows["message"] = "Product added successfully.";
 	
+    echoResponse(200, $rows);
+});
+
+$app->get('/products/:id', function($id) {
+	$db = new DbHandler();
+    $rows = $db->select("products_new","productid,producttypeid,sku,productname,description,price,stock,color,cal,carot,itc,folate,potassium,fiber,status", array('producttypeid'=>$id));
     echoResponse(200, $rows);
 });
 
@@ -300,7 +308,20 @@ $app->delete('/products/:id', function($id) {
 
 $app->get('/orders', function() { 
 	$db = new DbHandler();
-	$rows = $db->select("orders","orderid,custid,productid,quantity,total,dateordered",array());
+	$condition = array('status'=>'Not Approved');
+	$rows = $db->select("orders","orderid,custid,productid,quantity,total,dateordered,status",$condition);
     echoResponse(200, $rows);
 });
+
+$app->put('/orders/:id', function($id) use ($app) { 
+    $data = json_decode($app->request->getBody());
+    $condition = array('orderid'=>$id);
+    $mandatory = array();
+    $db = new DbHandler();
+    $rows = $db->update("orders", $data, $condition, $mandatory);
+    if($rows["status"]=="success")
+       $rows["message"] = "Product information updated successfully."; 
+    echoResponse(200, $rows);
+});
+
 ?>

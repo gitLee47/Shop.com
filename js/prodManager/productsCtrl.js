@@ -1,17 +1,49 @@
-storeApp.controller('productsCtrl', function ($scope, $modal, $filter, Data) {
+storeApp.controller('productsCtrl', function ($scope, $modal, $filter, Data, dataSharingService) {
     $scope.product = {};
-    Data.get('products').then(function(data){
-        $scope.products = data.data;
-    });
-	Data.get('orders').then(function(data){
-        $scope.orders = data.data;
-    });
+	
+	if(sessionStorage.getItem('prodlogin') == null || sessionStorage.getItem('prodlogin') == "undefined" || sessionStorage.getItem('prodlogin') == "null"){
+		//console.log("Hello");
+		$scope.prodlogin = dataSharingService.getCustomer()[0];
+		//console.log("CustDet: "+$scope.prodlogin);
+		sessionStorage.setItem('prodlogin', JSON.stringify($scope.prodlogin));
+	}
+	else if(sessionStorage.getItem('prodlogin') != "null"){
+		$scope.prodlogin = JSON.parse(sessionStorage.getItem('prodlogin'));
+	}
+
+	if($scope.prodlogin.logintypeid == 2) {
+		Data.get("products/"+$scope.prodlogin.storetype).then(function(data){
+			$scope.products = data.data;
+		});
+		
+		Data.get("orders").then(function(data){
+			$scope.orders = data.data;
+		});
+	}
+	else {
+		Data.get('products').then(function(data){
+			$scope.products = data.data;
+		});
+		
+		Data.get('orders').then(function(data){
+			$scope.orders = data.data;
+		});	
+	}
+	
     $scope.changeProductStatus = function(product){
         product.status = (product.status=="Active" ? "Inactive" : "Active");
         Data.put("products/"+product.productid,{status:product.status}).then(function(results){
 			Data.toast(results);
 		});
     };
+	
+	$scope.changeOrderStatus = function(order){
+        order.status = (order.status=="NotApproved" ? "Approved" : "Approved");
+        Data.put("orders/"+order.orderid,{status:order.status}).then(function(results){
+			Data.toast(results);
+		});
+    };
+	
     $scope.deleteProduct = function(product){
         if(confirm("Are you sure to remove the product")){
             Data.delete("products/"+product.productid).then(function(result){

@@ -2,7 +2,11 @@ storeApp.service("dataSharingService", function() {
  var customer = [];
 
    this.addCustomer = function(newObj) {
-      customer.push(newObj);
+    while(customer.length > 0) {
+		customer.pop();
+	}
+    
+	customer.push(newObj);
   }
 
   this.getCustomer = function(){

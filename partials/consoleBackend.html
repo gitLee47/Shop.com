@@ -80,7 +80,7 @@
 											
 											<tr><th ng-repeat="c in oColumns">{{c.text}}</th></tr>
 
-											<tr ng-repeat="o in orders | filter:filterOrders | orderBy:'-orderid'" id="{{o.orderid}}"  ng-animate="'animate'">
+											<tr ng-repeat="o in orders | filter:filterOrders | orderBy:'dateordered'" id="{{o.orderid}}"  ng-animate="'animate'">
 												<td>{{o.orderid}}</td>
 												<td>{{o.custid}}</td>
 												<td>{{o.productid}}</td>
@@ -88,13 +88,7 @@
 												<td>{{o.total}}</td>
 												<td>{{o.dateordered}}</td>
 												<td>
-													<button class="btn" ng-class="{Active:'btn-success', Inactive:''}[c.status]" ng-click="changeProductStatus(c);">{{c.status}}</button>
-												</td>
-												<td style="width:100px">
-													<div class="btn-group">
-													  <button type="button" class="btn btn-default fa fa-edit" ng-click="open(c);"></button>
-													  <button type="button" class="btn btn-danger fa fa-trash-o" ng-click="deleteProduct(c);"></button>
-													</div>
+													<button class="btn" ng-class="{Approved:'btn-success', NotApproved:''}[o.status]" ng-click="changeOrderStatus(o);">{{o.status}}</button>
 												</td>
 											</tr>
 											</table>

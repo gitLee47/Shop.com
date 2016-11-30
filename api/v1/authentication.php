@@ -224,13 +224,13 @@ $app->get('/logoutProd', function() {
 $app->get('/store', function() { 
     $db = new DbHandler();
 	$condition = array('status'=>'Active');
-    $rows = $db->select("products_new","productid,sku,productname,description,price,stock,color,cal,carot,itc,folate,potassium,fiber",$condition);
+    $rows = $db->select("products_new","productid,producttypeid,sku,productname,description,price,stock,color,cal,carot,itc,folate,potassium,fiber",$condition);
     echoResponse(200, $rows);
 });
 
 $app->get('/product/:id', function($id) {
 	$db = new DbHandler();
-    $rows = $db->select("products_new","productid,sku,productname,description,price,stock,color,cal,carot,itc,folate,potassium,fiber", array('sku'=>$id));
+    $rows = $db->select("products_new","productid,producttypeid,sku,productname,description,price,stock,color,cal,carot,itc,folate,potassium,fiber", array('sku'=>$id));
     echoResponse(200, $rows);
 });
 
@@ -238,15 +238,25 @@ $app->post('/order', function() use ($app) {
     $response = array();
     $r = json_decode($app->request->getBody());
     $db = new DbHandler();
-	
 	//$dataSet = json_decode($r->order); 
-	$quant = "";
+	$vals = array();
 	foreach($r->order as $obj){
-		$column_names = array('custid', 'productid', 'quantity', 'total');
-		$table_name = "orders";
+		$cust_id = $obj->custid;
+		$total = $obj->total;
+	}
+	$status = 'Not Approved';
+	$vals = array('custid' => $cust_id, 'total' => $total, 'status' => $status);
+	$table_name = "orders";
+	$column_names = array('custid','total','status');
+	$result_order_tab = $db->insertIntoTable($vals, $column_names, $table_name);
+	
+	foreach($r->order as $obj){
+		$column_names = array('orderid', 'productid', 'producttypeid', 'quantity');
+		$table_name = "order_items";
 		$sku = $obj->item_number;
 		$product = $db->getOneRecord("select productid, stock from products_new where sku='$sku'");
 		$obj -> productid =  $product['productid'];
+		$obj -> orderid = $result_order_tab;
 		$result_order = $db->insertIntoTable($obj, $column_names, $table_name);
 		if($result_order != null){
 			$table_name = "products_new";
@@ -255,7 +265,7 @@ $app->post('/order', function() use ($app) {
 			$result_update_product = $db->update($table_name, array('stock'=>$stock ),array('productid'=>$prodid));
 		}
 	}
-	echoResponse(200, $result_update_product);
+	echoResponse(200,$obj);
 });
 
 // ProductManager
@@ -309,7 +319,13 @@ $app->delete('/products/:id', function($id) {
 $app->get('/orders', function() { 
 	$db = new DbHandler();
 	$condition = array('status'=>'Not Approved');
-	$rows = $db->select("orders","orderid,custid,productid,quantity,total,dateordered,status",$condition);
+	$rows = $db->select("orders","orderid,custid,total,dateordered,status",$condition);
+    echoResponse(200, $rows);
+});
+
+$app->get('/orders/:id', function($id) {
+	$db = new DbHandler();
+    $rows = $db->select("products_new","productid,producttypeid,sku,productname,description,price,stock,color,cal,carot,itc,folate,potassium,fiber,status", array('producttypeid'=>$id));
     echoResponse(200, $rows);
 });
 

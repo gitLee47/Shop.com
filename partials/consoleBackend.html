@@ -5,7 +5,7 @@
 				<div class="panel-heading">
 					<ul id="bar-time-range" class="nav nav-tabs nav-justified">
 						<li class="active"><a href="#Inventory" data-toggle="tab">Inventory</a></li>
-						<li><a href="#Orders" data-toggle="tab" ng-hide="false">Orders</a></li>
+						<li><a href="#Orders" data-toggle="tab" ng-hide="prodlogin.logintypeid == 2">Orders</a></li>
 					</ul>
 				</div>
 				<div class="panel-body">
@@ -82,9 +82,7 @@
 
 											<tr ng-repeat="o in orders | filter:filterOrders | orderBy:'dateordered'" id="{{o.orderid}}"  ng-animate="'animate'">
 												<td>{{o.orderid}}</td>
-												<td>{{o.custid}}</td>
-												<td>{{o.productid}}</td>
-												<td>{{o.quantity}}</td>
+												<td>{{o.custid}}</td>		
 												<td>{{o.total}}</td>
 												<td>{{o.dateordered}}</td>
 												<td>

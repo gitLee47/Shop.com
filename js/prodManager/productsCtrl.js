@@ -15,10 +15,6 @@ storeApp.controller('productsCtrl', function ($scope, $modal, $filter, Data, dat
 		Data.get("products/"+$scope.prodlogin.storetype).then(function(data){
 			$scope.products = data.data;
 		});
-		
-		Data.get("orders").then(function(data){
-			$scope.orders = data.data;
-		});
 	}
 	else {
 		Data.get('products').then(function(data){
@@ -95,9 +91,7 @@ storeApp.controller('productsCtrl', function ($scope, $modal, $filter, Data, dat
 
 	$scope.oColumns = [
                     {text:"ID",predicate:"id",sortable:true,dataType:"number"},
-					{text:"CustomerID",predicate:"custid",sortable:true,dataType:"number"},
-                    {text:"ProductID",predicate:"productid",sortable:true, dataType:"number"},
-					{text:"Quantity Ordered",predicate:"quantity",reverse:true,sortable:true, dataType:"number"},
+					{text:"CustomerID",predicate:"custid",sortable:true,dataType:"number"},             
                     {text:"Total Amount",predicate:"total",sortable:true, dataType:"number"},
 					{text:"Date Ordered",predicate:"dateordered",sortable:true},
                     {text:"Action",predicate:"",sortable:false}

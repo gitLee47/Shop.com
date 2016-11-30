@@ -53,7 +53,7 @@ obj.shoppingCart.prototype.saveItems = function () {
 }
 
 // adds an item to the cart
-obj.shoppingCart.prototype.addItem = function (sku, name, price, quantity, customerid) {
+obj.shoppingCart.prototype.addItem = function (sku, name, price, quantity, customerid, producttype) {
     quantity = this.toNumber(quantity);
     if (quantity != 0) {
 
@@ -72,7 +72,7 @@ obj.shoppingCart.prototype.addItem = function (sku, name, price, quantity, custo
 		
         // new item, add now
         if (!found) {
-            var item = new cartItem(sku, name, price, quantity, customerid);
+            var item = new cartItem(sku, name, price, quantity, customerid, producttype);
             this.items.push(item);
         }
 
@@ -174,6 +174,7 @@ obj.shoppingCart.prototype.checkoutMySQL = function (parms, clearCart) {
         dataSet["quantity"] = item.quantity;
         dataSet["amount"] = item.price.toFixed(2);
 		dataSet["custid"] = item.customerid;
+		dataSet["producttypeid"] = item.producttype;
 		dataSet["total"] = item.price.toFixed(2) * item.quantity;
 		
 		data[i] = dataSet;  
@@ -307,12 +308,13 @@ function checkoutParameters(serviceName, merchantID, options) {
 //----------------------------------------------------------------
 // items in the cart
 //
-function cartItem(sku, name, price, quantity, customerid) {
+function cartItem(sku, name, price, quantity, customerid, producttype) {
     this.sku = sku;
     this.name = name;
     this.price = price * 1;
     this.quantity = quantity * 1;
 	this.customerid = customerid;
+	this.producttype = producttype;
 }
 
 return obj;

@@ -45,7 +45,7 @@
             {{product.price | currency}}
         </td>
         <td class="tdCenter">
-            <button class="btn btn-success fa fa-plus-square" ng-click="product.stock = product.stock - 1;cart.addItem(product.sku, product.productname, product.price, 1, customer.custid)" 
+            <button class="btn btn-success fa fa-plus-square" ng-click="product.stock = product.stock - 1;cart.addItem(product.sku, product.productname, product.price, 1, customer.custid, product.producttypeid)" 
 			ng-disabled="product.stock <= 0">
                 add to cart {{customer.custid}}
             </button>

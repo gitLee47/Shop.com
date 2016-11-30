@@ -44,7 +44,7 @@ storeApp.controller('storeController', function($scope, $rootScope, $routeParams
 	 if ($routeParams.productSku != null) {
 		Data.get('product/'+$routeParams.productSku).then(function(data){
 			var i =0;
-			$scope.product = new product(data.data[i]["sku"], data.data[i]["productname"], data.data[i]["description"], data.data[i]["price"], data.data[i]["stock"], data.data[i]["cal"], data.data[i]["carot"], data.data[i]["itc"], data.data[i]["folate"], data.data[i]["potassium"], data.data[i]["fiber"]);
+			$scope.product = new product(data.data[i]["sku"],data.data[i]["producttypeid"],data.data[i]["productname"], data.data[i]["description"], data.data[i]["price"], data.data[i]["stock"], data.data[i]["cal"], data.data[i]["carot"], data.data[i]["itc"], data.data[i]["folate"], data.data[i]["potassium"], data.data[i]["fiber"]);
 			//console.log($scope.product);
 		});
     }
@@ -55,7 +55,7 @@ storeApp.controller('storeController', function($scope, $rootScope, $routeParams
 		Data.get('store').then(function(data){
 			//console.log(data.data[0]["description"]);
 			for(var i=0 ; i <data.data.length; i++) {
-				items.push(new product(data.data[i]["sku"], data.data[i]["productname"], data.data[i]["description"], data.data[i]["price"], data.data[i]["stock"], data.data[i]["cal"], data.data[i]["carot"], data.data[i]["itc"], data.data[i]["folate"], data.data[i]["potassium"], data.data[i]["fiber"]));
+				items.push(new product(data.data[i]["sku"],data.data[i]["producttypeid"],data.data[i]["productname"], data.data[i]["description"], data.data[i]["price"], data.data[i]["stock"], data.data[i]["cal"], data.data[i]["carot"], data.data[i]["itc"], data.data[i]["folate"], data.data[i]["potassium"], data.data[i]["fiber"]));
 			}
 			$scope.products = items;
 		

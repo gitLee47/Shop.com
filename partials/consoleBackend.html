@@ -74,7 +74,7 @@
 													</div>
 												</div>
 											</div>
-										  <div class="panel-body">
+										<div class="panel-body">
 											<table class="table table-striped">
 											<tr ng-show="orders.length==0"><td style="vertical-align:middle;"><i class="fa fa-ban fa-3x"></i>&nbsp;No data found</td></tr>
 											<tr ng-hide="orders.length>-1"><td style="vertical-align:middle;"><i class="fa fa-cog fa-3x fa-spin"></i>&nbsp;Loading</td></tr>
@@ -132,8 +132,7 @@
 
 											<tr ng-repeat="s in stores | filter:filterStores | orderBy:'storeid'" id="{{s.storeid}}"  ng-animate="'animate'">
 												<td>{{s.storeid}}</td>
-												<td>{{s.numsalespersons}}</td>		
-												
+												<td>{{s.numsalespersons}}</td>													
 												<td>{{s.producttype}}</td>
 												<td>{{s.regionid}}</td>
 												<td>{{s.bldgnumber}}</td>

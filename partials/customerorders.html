@@ -1,0 +1,36 @@
+<h4 class="blog-post-title">Orders</h4>
+<hr/>
+
+<div class="table-responsive">
+<div class="panel panel-primary">
+  <div class="panel-heading">Your Orders
+      <div class="sw-search" >
+            <div class="nav-search" id="nav-search">
+                    Filter: <span class="input-icon">
+                        <input placeholder="Filter products list ..." class="nav-search-input" ng-model="filterOrders" ng-change="resetLimit();"  autocomplete="off" type="text" style="width:300px;" focus>
+                        <i class="search-icon fa fa-search nav-search-icon"></i>
+                    </span>
+            </div>
+        </div>
+    </div>
+<div class="panel-body">
+	<table class="table table-striped">
+	<tr ng-show="orders.length==0"><td style="vertical-align:middle;"><i class="fa fa-ban fa-3x"></i>&nbsp;No data found</td></tr>
+	<tr ng-hide="orders.length>-1"><td style="vertical-align:middle;"><i class="fa fa-cog fa-3x fa-spin"></i>&nbsp;Loading</td></tr>
+	
+	<tr><th ng-repeat="c in oColumns">{{c.text}}</th></tr>
+
+	<tr ng-repeat="o in orders | filter:filterOrders | orderBy:'dateordered'" id="{{o.orderid}}"  ng-animate="'animate'">
+		<td>{{o.orderid}}</td>
+		<td>{{o.custid}}</td>		
+		<td>{{o.total}}</td>
+		<td>{{o.dateordered}}</td>
+		<td>
+			<button class="btn" ng-class="{Approved:'btn-success', NotApproved:''}[o.status]">{{o.status}}</button>
+		</td>
+	</tr>
+	</table>
+</div>
+</div>
+</div>
+              

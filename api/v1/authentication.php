@@ -268,6 +268,14 @@ $app->post('/order', function() use ($app) {
 	echoResponse(200,$obj);
 });
 
+//Customer
+$app->get('/getOrders/:id', function($id) { 
+	$db = new DbHandler();
+	//$rows = $db->select("orders","orderid,custid,total,dateordered,status",$condition);
+	$rows = $db->getReportQueries("select * from orders where custid = '$id'");
+    echoResponse(200, $rows);
+});
+
 // ProductManager
 $app->get('/products', function() { 
 	$db = new DbHandler();

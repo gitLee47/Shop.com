@@ -13,6 +13,7 @@ storeApp.controller('authCtrl', function ($scope, $rootScope, $routeParams, $loc
             }
         });
     };
+	
     $scope.signup = {email:'',password:'',name:'',phone:'',street:'', bldgnumber:'', city:'', state:'', country:'', zip:''};
     $scope.signUp = function (customer) {
 		customer.logintypeid = "1";
@@ -27,6 +28,7 @@ storeApp.controller('authCtrl', function ($scope, $rootScope, $routeParams, $loc
             }
         });
     };
+	
     $scope.logout = function () {
 		sessionStorage.setItem('customer', null);
         Data.get('logout').then(function (results) {

@@ -61,6 +61,7 @@ storeApp.controller('productsCtrl', function ($scope, $modal, $filter, Data, dat
             });
         }
     };
+	
     $scope.open = function (p,size) {
         var modalInstance = $modal.open({
           templateUrl: 'partials/productEdit.html',

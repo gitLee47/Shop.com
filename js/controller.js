@@ -27,12 +27,12 @@ storeApp.controller('storeController', function($scope, $rootScope, $routeParams
     };
 	*/
 	//$scope.customer = {name:"test"};
-	console.log(sessionStorage.getItem('customer'));
+	//console.log(sessionStorage.getItem('customer'));
 	//$scope.customer = {};
 	if(sessionStorage.getItem('customer') == "null"){
-		console.log("Hello");
+		//console.log("Hello");
 		$scope.customer = dataSharingService.getCustomer()[0];
-		console.log("CustDet: "+$scope.customer);
+		//console.log("CustDet: "+$scope.customer);
 		sessionStorage.setItem('customer', JSON.stringify($scope.customer));
 	}
 	else if(sessionStorage.getItem('customer') != "null"){
@@ -56,9 +56,29 @@ storeApp.controller('storeController', function($scope, $rootScope, $routeParams
 			//console.log(data.data[0]["description"]);
 			for(var i=0 ; i <data.data.length; i++) {
 				items.push(new product(data.data[i]["sku"],data.data[i]["producttypeid"],data.data[i]["productname"], data.data[i]["description"], data.data[i]["price"], data.data[i]["stock"], data.data[i]["cal"], data.data[i]["carot"], data.data[i]["itc"], data.data[i]["folate"], data.data[i]["potassium"], data.data[i]["fiber"]));
-			}
-			$scope.products = items;
+		}
+		$scope.products = items;
 		
 		});
 	}
+	
+	$scope.orders = {};
+	var orderitems = [];
+	console.log($scope.customer.custid);
+	Data.get('getOrders/'+$scope.customer.custid).then(function(data){
+		console.log(data);
+		//for(var i=0 ; i <data.data.length; i++) {
+		//	orderitems.push(new product(data.data[i]["custid"],data.data[i]["dateordered"],data.data[i]["orderid"], data.data[i]["status"], data.data[i]["total"]));
+		//}
+		$scope.orders = data;
+		
+	});
+	
+	$scope.oColumns = [
+				{text:"ID",predicate:"id",sortable:true,dataType:"number"},
+				{text:"CustomerID",predicate:"custid",sortable:true,dataType:"number"},             
+				{text:"Total Amount",predicate:"total",sortable:true, dataType:"number"},
+				{text:"Date Ordered",predicate:"dateordered",sortable:true},
+				{text:"Status",predicate:"",sortable:false}
+	];
 });

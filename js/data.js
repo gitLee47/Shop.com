@@ -11,9 +11,9 @@ storeApp.factory("Data", ['$http', 'toaster',
             window.alert("hi!");
         }
         obj.get = function (q) {
-			console.log(q);
+			//console.log(q);
             return $http.get(serviceBase + q).then(function (results) {
-				console.log(results);
+				//console.log(results);
                 return results.data;
             });
         };
@@ -25,7 +25,7 @@ storeApp.factory("Data", ['$http', 'toaster',
             });
         };
         obj.put = function (q, object) {
-			console.log(q);
+			//console.log(q);
             return $http.put(serviceBase + q, object).then(function (results) {
                 return results.data;
             });

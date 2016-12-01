@@ -17,6 +17,13 @@ class DbHandler {
         $r = $this->conn->query($query.' LIMIT 1') or die($this->conn->error.__LINE__);
         return $result = $r->fetch_assoc();    
     }
+	/**
+     * Fetching single record
+     */
+    public function getReportQueries($query) {
+        $r = $this->conn->query($query) or die($this->conn->error.__LINE__);
+        return $result = $r->fetch_all(MYSQLI_ASSOC);    
+    }
     /**
      * Creating new record
      */
@@ -36,6 +43,8 @@ class DbHandler {
             $values = $values."'".$$desired_key."',";
         }
         $query = "INSERT INTO ".$table_name."(".trim($columns,',').") VALUES(".trim($values,',').")";
+		
+		//return $query;
         $r = $this->conn->query($query) or die($this->conn->error.__LINE__);
 		
         if ($r) {

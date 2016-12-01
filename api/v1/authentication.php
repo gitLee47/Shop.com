@@ -340,4 +340,63 @@ $app->put('/orders/:id', function($id) use ($app) {
     echoResponse(200, $rows);
 });
 
+//Reports
+$app->get('/totsales', function() { 
+	$db = new DbHandler();
+	$rows = $db->getReportQueries("select sum(total) as totalsales from orders");
+    echoResponse(200, $rows);
+});
+
+$app->get('/totorders', function() { 
+	$db = new DbHandler();
+	$rows = $db->getReportQueries("select count(orderid) as totorders from orders");
+    echoResponse(200, $rows);
+});
+
+$app->get('/stores', function() { 
+	$db = new DbHandler();
+	$rows = $db->getReportQueries("select storeid,numsalespersons,s.addressid,producttype,regionid,bldgnumber,street,city,state,country,postalcode  
+from store s, address a where a.addressid = s.addressid;");
+    echoResponse(200, $rows);
+});
+
+$app->put('/stores/:id', function($id) use ($app) { 
+    $data = json_decode($app->request->getBody());
+    $condition = array('storeid'=>$id);
+    $mandatory = array();
+	$storedata =  array('numsalespersons'=>$data->numsalespersons,'producttype'=>$data->producttype,'regionid'=>$data->regionid);
+	$db = new DbHandler();
+    $rows = $db->update("store", $storedata, $condition, $mandatory);
+	
+	$condition = array('addressid'=>$data->addressid);
+	$addressdata =  array('bldgnumber'=>$data->bldgnumber,'street'=>$data->street,'city'=>$data->city,'state'=>$data->state,'country'=>$data->country,'postalcode'=>$data->postalcode);
+    $mandatory = array();
+    $db = new DbHandler();
+    $rows = $db->update("address", $addressdata, $condition, $mandatory);
+	
+   if($rows["status"]=="success")
+      $rows["message"] = "Store information updated successfully."; 
+    echoResponse(200, $rows);
+});
+
+$app->post('/stores', function() use ($app) { 
+    $data = json_decode($app->request->getBody());
+    $mandatory = array();
+    $db = new DbHandler();
+	
+	$column_names = array('bldgnumber','street','city','state','country','postalcode','addresstypeid');
+	
+    $rowid = $db->insertIntoTable($data, $column_names, "address");
+	
+	$column_names = array('numsalespersons','addressid','producttype','regionid');
+	
+	$data ->addressid = $rowid;
+    $rows = $db->insertIntoTable($data, $column_names, "store");
+	
+    if($rows["status"]=="success")
+		$rows["message"] = "Store added successfully.";
+	
+    echoResponse(200, $rows);
+});
+
 ?>

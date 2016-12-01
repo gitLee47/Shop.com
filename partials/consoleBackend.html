@@ -6,6 +6,7 @@
 					<ul id="bar-time-range" class="nav nav-tabs nav-justified">
 						<li class="active"><a href="#Inventory" data-toggle="tab">Inventory</a></li>
 						<li><a href="#Orders" data-toggle="tab" ng-hide="prodlogin.logintypeid == 2">Orders</a></li>
+						<li><a href="#Reports" data-toggle="tab" ng-hide="prodlogin.logintypeid == 2">Reports</a></li>
 					</ul>
 				</div>
 				<div class="panel-body">
@@ -93,6 +94,65 @@
 										</div>
 										</div>
 										</div>
+							
+						</div>
+						<div class="tab-pane fade" id="Reports">
+							
+							<table class="table table-striped">
+								<tr>
+									<td ng-repeat="sales in totsales">
+										<h3>Total Sales</h3>
+										{{sales.totalsales}}
+									</td>
+									<td ng-repeat="orders in totorders">
+										<h3>Total Orders</h3>
+										{{orders.totorders}}
+									</td>
+								</tr>
+							</table>
+							<button type="button" class="btn btn-danger fa fa-plus" ng-click="openStore(store);">&nbsp;Add New Store</button>
+							<div class="table-responsive">
+										<div class="panel panel-primary">
+										  <div class="panel-heading">List of Stores
+											  <div class="sw-search" >
+													<div class="nav-search" id="nav-search">
+															Filter: <span class="input-icon">
+																<input placeholder="Filter store list ..." class="nav-search-input" ng-model="filterStores" ng-change="resetLimit();"  autocomplete="on" type="text" style="width:300px;" focus>
+																<i class="search-icon fa fa-search nav-search-icon"></i>
+															</span>
+													</div>
+												</div>
+											</div>
+										  <div class="panel-body">
+											<table class="table table-striped">
+											<tr ng-show="stores.length==0"><td style="vertical-align:middle;"><i class="fa fa-ban fa-3x"></i>&nbsp;No data found</td></tr>
+											<tr ng-hide="stores.length>-1"><td style="vertical-align:middle;"><i class="fa fa-cog fa-3x fa-spin"></i>&nbsp;Loading</td></tr>
+											
+											<tr><th ng-repeat="sc in sColumns">{{sc.text}}</th></tr>
+
+											<tr ng-repeat="s in stores | filter:filterStores | orderBy:'storeid'" id="{{s.storeid}}"  ng-animate="'animate'">
+												<td>{{s.storeid}}</td>
+												<td>{{s.numsalespersons}}</td>		
+												
+												<td>{{s.producttype}}</td>
+												<td>{{s.regionid}}</td>
+												<td>{{s.bldgnumber}}</td>
+												<td>{{s.street}}</td>
+												<td>{{s.city}}</td>
+												<td>{{s.state}}</td>
+												<td>{{s.country}}</td>
+												<td>{{s.postalcode}}</td>														
+												<td style="width:100px">
+													<div class="btn-group">
+													  <button type="button" class="btn btn-default fa fa-edit" ng-click="openStore(s);"></button>
+													  <button type="button" class="btn btn-danger fa fa-trash-o" ng-click="deleteProduct(s);"></button>
+													</div>
+												</td>
+											</tr>
+											</table>
+										</div>
+										</div>
+							</div>
 							
 						</div>
 					</div>

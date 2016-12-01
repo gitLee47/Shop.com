@@ -35,6 +35,11 @@ storeApp.config(['$routeProvider', function($routeProvider) {
 			templateUrl: 'partials/consoleBackend.html',
 			controller: 'productsCtrl'
         }).
+		when('/Reports', {
+			title: 'Console',
+			templateUrl: 'partials/consoleBackend.html',
+			controller: 'productsCtrl'
+        }).
 		when('/productmanager', {
 			title: 'Products',
 			templateUrl: 'partials/products.html',

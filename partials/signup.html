@@ -14,7 +14,7 @@
                 <div class="widget-body">
                     <div class="widget-main">
                         <h4 class="header blue lighter bigger">
-                            Signup for AngularCode
+                            Signup for YourBasket
                         </h4>
                         <br/>
                         <form name="signupForm" class="form-horizontal" role="form">
@@ -22,8 +22,8 @@
                                 <label class="col-sm-5 control-label no-padding-right" for="email">Email</label>
                                 <div class="col-sm-7">
                                     <span class="block input-icon input-icon-right">
-                                        <input type="text" class="form-control" placeholder="Email" name="email" ng-model="signup.email" focus/>
-                                        <span ng-show="signupForm.email.$error.email" class="help-inline">Email is not valid</span> 
+                                        <input type="email" class="form-control" placeholder="Email" name="email" ng-model="signup.email" ng-pattern='/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/' focus required/>
+                                        <span ng-show="signupForm.email.$error.pattern && signupForm.email.$invalid" class="help-inline">Email is not valid</span> 
                                     </span>
                                 </div>
                             </div>
@@ -52,7 +52,7 @@
                                 <label class="col-sm-5 control-label no-padding-right" for="name">Name</label>
                                 <div class="col-sm-7">
                                 <span class="block input-icon input-icon-right">
-                                <input type="text" class="form-control" placeholder="Name" ng-model="signup.name" />
+                                <input type="text" class="form-control" placeholder="Name" ng-model="signup.name" required/>
 								</span>
                                 </div>
                             </div>
@@ -60,7 +60,8 @@
                                 <label class="col-sm-5 control-label no-padding-right" for="phone">Phone</label>
                                 <div class="col-sm-7">
                                     <span class="block input-icon input-icon-right">
-                                <input type="text" class="form-control" placeholder="Phone" name="phone" ng-model="signup.phone"/>
+                                <input type="text" class="form-control" placeholder="Phone" name="phone" ng-model="signup.phone" ng-pattern="/^\+?\d{2}[- ]?\d{3}[- ]?\d{5}$/" required/>
+								<span ng-show="signupForm.phone.$error.pattern" class="help-inline">Phone number is not in valid format(e.g. +91-636-78658)</span> 
                             </span>
                                 </div>
                             </div>
@@ -81,25 +82,33 @@
                                 <label class="col-sm-5 control-label no-padding-right" for="address">Address Line 2</label>
                                 <div class="col-sm-3">
 								<span class="block input-icon input-icon-right">
-                                <input type="text" class="form-control" placeholder="city" ng-model="signup.city" />
+                                <!-- <input type="text" class="form-control" placeholder="city" ng-model="signup.city" /> -->
+								<select class="form-control" ng-model="signup.country" ng-options="obj.country as obj.country for obj in countries" ng-change="getCountryStates(signup)" required>
+								  <option value="">-- Select Country --</option>
+								</select>
+								
 								</span>
 								</div>
 								<div class="col-sm-4">
 								<span class="block input-icon input-icon-right">
-                                <input type="text" class="form-control" placeholder="state" ng-model="signup.state" />
+                              	<select class="form-control" ng-model="signup.state" ng-options="obj.state as obj.state for obj in states" ng-change="getStateCities(signup)" required>
+								  <option value="">-- Select State --</option>
+								</select>
 								</span>
 								</div>
                             </div>
 							<div class="form-group">
                                 <label class="col-sm-5 control-label no-padding-right" for="address">Address Line 3</label>
                                 <div class="col-sm-4">
-								<span class="block input-icon input-icon-right">
-                                <input type="text" class="form-control" placeholder="country" ng-model="signup.country" />
+								<span class="block input-icon input-icon-right">                             
+								<select class="form-control" ng-model="signup.city" ng-options="obj.city as obj.city for obj in cities" required>
+								  <option value="">-- Select City --</option>
+								</select>
 								</span>
 								</div>
 								<div class="col-sm-3">
 								<span class="block input-icon input-icon-right">
-                                <input type="text" class="form-control" placeholder="zip" ng-model="signup.postalcode" />
+                                <input type="text" class="form-control" placeholder="zip" ng-model="signup.postalcode" required/>
 								</span>
 								</div>
                             </div>

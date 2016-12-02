@@ -81,4 +81,6 @@ storeApp.controller('storeController', function($scope, $rootScope, $routeParams
 				{text:"Date Ordered",predicate:"dateordered",sortable:true},
 				{text:"Status",predicate:"",sortable:false}
 	];
+	
+	$scope.orderBySel = [{ value: "price", name: "Cheapest" }, { value: "-price", name: "Costliest" }];
 });

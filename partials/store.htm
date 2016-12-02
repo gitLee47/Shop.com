@@ -28,6 +28,13 @@
 
 <p>
     Search: <input ng-model="search">
+	Order by: <!--
+	<select ng-model="orderList">
+    <option value="price" selected>Cheapest First</option>
+    <option value="-price">Costliest First</option>
+    <option value="stock">Stock</option>
+	</select> -->
+	<select ng-init="orderList = options[0].value" ng-model="orderList" ng-options="obj.value as obj.name for obj in orderBySel"></select>
 </p>
 
 <table class="table table-bordered">
@@ -54,7 +61,8 @@
             <b>Click to Add</b>
         </td>
     </tr>
-    <tr ng-repeat="product in products | orderBy:'name' | filter:search" >
+	
+    <tr ng-repeat="product in products | orderBy:orderList | filter:search" >
         <td class="tdCenter"><img ng-src="img/products/{{product.sku}}.jpg" alt="{{product.productname}}" /></td>
         <td>
             <a href="#/products/{{product.sku}}"><b>{{product.productname}}</b></a><br />

@@ -1,3 +1,25 @@
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div ng-controller="authCtrl" class="container-fluid">
+	<div class="navbar-header">
+	  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+		<span class="sr-only">Toggle navigation</span>
+		<span class="icon-bar"></span>
+		<span class="icon-bar"></span>
+		<span class="icon-bar"></span>
+	  </button>
+	  <a class="navbar-brand" href="default.html#/viewprofile">Welcome {{name}}</a>
+	</div>
+	<div id="navbar" class="navbar-collapse collapse">
+	  <ul class="nav navbar-nav navbar-right">
+		<li><a href="default.html#/store" title="Store"> Home </a></li>
+		<li><a href="default.html#/viewprofile" title="View Profile"> View Profile </a></li>
+		<li><a href="default.html#/vieworders" title="View Previous Orders"> View Past Orders </a></li>
+		<li><a ng-click="logout();"> Logout</a></li>
+	  </ul>
+	</div>
+  </div>
+</nav>
+
 <h4 class="blog-post-title">Orders</h4>
 <hr/>
 

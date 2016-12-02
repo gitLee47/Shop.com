@@ -1,4 +1,4 @@
-storeApp.controller('authCtrl', function ($scope, $rootScope, $routeParams, $location, $http, Data, dataSharingService) {
+storeApp.controller('authCtrl', function ($scope, $rootScope, $routeParams, $location, $http, Data, dataSharingService, CountryService) {
     //initially set those objects to null to avoid undefined error
     $scope.login = {};
     $scope.signup = {};
@@ -31,14 +31,15 @@ storeApp.controller('authCtrl', function ($scope, $rootScope, $routeParams, $loc
 		customer.logintypeid = "1";
 		customer.addresstypeid = "1";
 		customer.custtypeid = "1";
-        Data.post('signUp', {
+		console.log(customer);
+        /*Data.post('signUp', {
             customer: customer
         }).then(function (results) {
             Data.toast(results);
             if (results.status == "success") {
                 $location.path('dashboard');
             }
-        });
+        });*/
     };
 	
     $scope.logout = function () {
@@ -49,4 +50,17 @@ storeApp.controller('authCtrl', function ($scope, $rootScope, $routeParams, $loc
             $location.path('login');
         });
     };
+	
+	$scope.countries = CountryService.getCountry();
+    
+	$scope.getCountryStates = function(model){
+		$scope.states = CountryService.getCountryState(model.country);
+		$scope.cities =[];
+	}
+  
+	$scope.getStateCities = function(model){
+		//debugger;
+		$scope.cities = CountryService.getStateCity(model.state);
+	}
+  
 });

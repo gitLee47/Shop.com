@@ -41,6 +41,11 @@ storeApp.config(['$routeProvider', function($routeProvider) {
 			templateUrl: 'partials/customerorders.html',
 			controller: 'storeController'
         }).
+		when('/viewprofile', {
+			title: 'Your Orders',
+			templateUrl: 'partials/profile.html',
+			controller: 'authCtrl'
+        }).
 		when('/', {
 			title: 'Login',
 			templateUrl: 'partials/login.html',

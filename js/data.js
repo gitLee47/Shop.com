@@ -18,9 +18,9 @@ storeApp.factory("Data", ['$http', 'toaster',
             });
         };
         obj.post = function (q, object) {
-			console.log(object)
+			//console.log(object)
             return $http.post(serviceBase + q, object).then(function (results) {
-				console.log(results.data);
+				//console.log(results.data);
                 return results.data;
             });
         };

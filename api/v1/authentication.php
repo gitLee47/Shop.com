@@ -34,7 +34,7 @@ $app->post('/login', function() use ($app) {
 	$db = new DbHandler();
 	$password = $r->customer->password;
 	$email = $r->customer->email;
-	$user = $db->getOneRecord("select userid, password, email, created, logintypeid from login where phone='$email' or email='$email' and logintypeid = 1");
+	$user = $db->getOneRecord("select userid, phone, password, email, created, logintypeid from login where phone='$email' or email='$email' and logintypeid = 1");
 
     if ($user != NULL) {
 		
@@ -46,13 +46,22 @@ $app->post('/login', function() use ($app) {
         $response['email'] = $user['email'];
         $response['createdAt'] = $user['created'];
 	
-		$fulluser = $db->getOneRecord("select custid, name  from customer where userid='$uid'");
+		$fulluser = $db->getOneRecord("select custid, name, addressid  from customer where userid='$uid'");
+		$addressid = $fulluser["addressid"];
+		$useraddress = $db->getOneRecord("select * from address where addressid='$addressid'");
 		$name = $fulluser['name'];
 		$response['custid'] = $fulluser['custid'];
-		
 		$response['uid'] = $uid;
 		$response['name'] = $name;
 		$response['logintypeid'] = $user['logintypeid'];
+		$response['bldgnumber'] = $useraddress['bldgnumber'];
+		$response['street'] = $useraddress['street'];
+		$response['city'] = $useraddress['city'];
+		$response['state'] = $useraddress['state'];
+		$response['country'] = $useraddress['country'];
+		$response['postalcode'] = $useraddress['postalcode'];
+		$response['password'] = $password;
+		$response['phone'] = $user['phone'];
         if (!isset($_SESSION)) {
             session_start();
         }
@@ -323,7 +332,6 @@ $app->delete('/products/:id', function($id) {
 });
 
 //Orders Tab
-
 $app->get('/orders', function() { 
 	$db = new DbHandler();
 	$condition = array('status'=>'Not Approved');

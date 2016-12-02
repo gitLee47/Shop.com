@@ -29,7 +29,7 @@ storeApp.controller('storeController', function($scope, $rootScope, $routeParams
 	//$scope.customer = {name:"test"};
 	//console.log(sessionStorage.getItem('customer'));
 	//$scope.customer = {};
-	if(sessionStorage.getItem('customer') == "null"){
+	if(sessionStorage.getItem('customer') == "null" || sessionStorage.getItem('customer') == null || sessionStorage.getItem('customer') == "undefined"){
 		//console.log("Hello");
 		$scope.customer = dataSharingService.getCustomer()[0];
 		//console.log("CustDet: "+$scope.customer);

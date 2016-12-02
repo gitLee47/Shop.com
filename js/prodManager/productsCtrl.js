@@ -1,6 +1,7 @@
 storeApp.controller('productsCtrl', function ($scope, $modal, $filter, Data, dataSharingService) {
     $scope.product = {};
 	$scope.store = {};
+	$scope.producttypes = [];
 	if(sessionStorage.getItem('prodlogin') == null || sessionStorage.getItem('prodlogin') == "undefined" || sessionStorage.getItem('prodlogin') == "null"){
 		//console.log("Hello");
 		$scope.prodlogin = dataSharingService.getCustomer()[0];
@@ -12,9 +13,13 @@ storeApp.controller('productsCtrl', function ($scope, $modal, $filter, Data, dat
 	}
 
 	if($scope.prodlogin.logintypeid == 2) {
+		
 		Data.get("products/"+$scope.prodlogin.storetype).then(function(data){
 			$scope.products = data.data;
 		});
+		
+		$scope.producttypes.push({"producttypeid":$scope.prodlogin.storetype});
+		dataSharingService.addProductTypes($scope.producttypes);
 	}
 	else {
 		Data.get('products').then(function(data){
@@ -25,11 +30,23 @@ storeApp.controller('productsCtrl', function ($scope, $modal, $filter, Data, dat
 			$scope.orders = data.data;
 		});	
 		
+		Data.get('producttypes').then(function(data){
+			//$scope.stores = data;
+			//console.log(data);
+			dataSharingService.addProductTypes(data);
+		});
+		
+		Data.get('regions').then(function(data){
+			//$scope.stores = data;
+			console.log(data);
+			dataSharingService.addRegionIds(data);
+		});
+		
 		Data.get('stores').then(function(data){
 			$scope.stores = data;
 			//console.log(data);
 		});
-		
+
 		Data.get('totsales').then(function(data){
 			$scope.totsales = data;
 		});
@@ -38,7 +55,7 @@ storeApp.controller('productsCtrl', function ($scope, $modal, $filter, Data, dat
 			$scope.totorders = data;
 		});
 	}
-	
+	//console.log($scope.producttypes);
     $scope.changeProductStatus = function(product){
         product.status = (product.status=="Active" ? "Inactive" : "Active");
         Data.put("products/"+product.productid,{status:product.status}).then(function(results){
@@ -155,9 +172,12 @@ storeApp.controller('productsCtrl', function ($scope, $modal, $filter, Data, dat
                 ];
 });
 
-storeApp.controller('productEditCtrl', function ($scope, $modalInstance, item, Data) {
-
-  $scope.product = angular.copy(item);
+storeApp.controller('productEditCtrl', function ($scope, $modalInstance, item, Data, dataSharingService) {
+	
+	$scope.product = angular.copy(item);
+	$scope.producttypes = [];
+	
+	$scope.producttypes = dataSharingService.getProductTypes();
         
         $scope.cancel = function () {
             $modalInstance.dismiss('Close');
@@ -198,10 +218,27 @@ storeApp.controller('productEditCtrl', function ($scope, $modalInstance, item, D
         };
 });
 
-storeApp.controller('storeEditCtrl', function ($scope, $modalInstance, item, Data) {
+storeApp.controller('storeEditCtrl', function ($scope, $modalInstance, item, Data, dataSharingService, CountryService) {
 
-  $scope.store = angular.copy(item);
-        
+		$scope.store = angular.copy(item);
+		$scope.producttypes = [];
+		$scope.regionids = [];
+	
+		$scope.producttypes = dataSharingService.getProductTypes();
+        $scope.regionids  = dataSharingService.getRegionIds();
+		
+		$scope.countries = CountryService.getCountry();
+    
+		$scope.getCountryStates = function(model){
+			$scope.states = CountryService.getCountryState(model.country);
+			$scope.cities =[];
+		}
+	  
+		$scope.getStateCities = function(model){
+			//debugger;
+			$scope.cities = CountryService.getStateCity(model.state);
+		}
+		
         $scope.cancel = function () {
             $modalInstance.dismiss('Close');
         };

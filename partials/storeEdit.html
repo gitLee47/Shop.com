@@ -15,11 +15,17 @@
             </form-element>
 			
 			<form-element label="Product Type" mod="store">
-                <input type="text" name="producttype" class="form-control" placeholder="Product Type" ng-model="store.producttype" only-numbers required/>               
+                <input type="text" name="producttype" class="form-control" placeholder="Product Type" ng-model="store.producttype" only-numbers required disabled/>
+				<select class="form-control" ng-model="store.producttype" ng-options="obj.producttypeid as obj.producttypeid for obj in producttypes">
+				  <option value="">-- Select --</option>
+				</select>				
             </form-element>
 
             <form-element label="Region" mod="store">
-				<input type="text" name="regionid" class="form-control" placeholder="Region" ng-model="store.regionid" only-numbers required/>
+				<input type="text" name="regionid" class="form-control" placeholder="Region" ng-model="store.regionid" only-numbers required disabled/>
+				<select class="form-control" ng-model="store.regionid" ng-options="obj.regionid as obj.regionid for obj in regionids">
+				  <option value="">-- Select --</option>
+				</select>
             </form-element>
 			
             <form-element label="BuildingNo" mod="store">
@@ -30,16 +36,25 @@
                 <input type="text" name="street" class="form-control" placeholder="Street" ng-model="store.street"  required/>         
             </form-element>
 			
-			<form-element label="City" mod="store">
-                <input type="text" name="city" class="form-control" placeholder="City" ng-model="store.city" replace="[^a-zA-Z]" with="" required/>               
+			<form-element label="City" mod="store">          
+				<input type="text" class="form-control" name="country" placeholder="Country" ng-model="store.country" disabled/>
+				<select class="form-control" ng-model="store.country" ng-options="obj.country as obj.country for obj in countries" ng-change="getCountryStates(store)">
+				  <option value="">-- Select Country --</option>
+				</select>
             </form-element>
 
-            <form-element label="State" mod="store">
-                <input type="text" name="state" class="form-control" placeholder="State" ng-model="store.state" replace="[^a-zA-Z]" with="" required/>   
+            <form-element label="State" mod="store">            
+				<input type="text" class="form-control" name="state" placeholder="State" ng-model="store.state" disabled/>
+				<select class="form-control" ng-model="store.state" ng-options="obj.state as obj.state for obj in states" ng-change="getStateCities(store)">
+				  <option value="">-- Select State --</option>
+				</select>
             </form-element>
 			
 			<form-element label="Country" mod="store">
-                <input type="text" name="country" class="form-control" placeholder="Country" ng-model="store.country" replace="[^a-zA-Z]" with="" required/>
+                <input type="text" class="form-control" name="city" placeholder="City" ng-model="store.city" disabled/>
+				<select class="form-control" ng-model="store.city" ng-options="obj.city as obj.city for obj in cities">
+				  <option value="">-- Select City --</option>
+				</select>
             </form-element>
 			
 			<form-element label="PostalCode" mod="store">

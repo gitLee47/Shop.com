@@ -1,5 +1,6 @@
 storeApp.service("dataSharingService", function() {
  var customer = [];
+ var producttypes = [];
 
    this.addCustomer = function(newObj) {
     while(customer.length > 0) {
@@ -10,6 +11,14 @@ storeApp.service("dataSharingService", function() {
 
   this.getCustomer = function(){
       return customer;
+  }
+  
+  this.addProductTypes = function(newObj) {
+      producttypes = newObj;
+  }
+  
+  this.getProductTypes = function(){
+      return producttypes;
   }
 
 });

@@ -331,6 +331,18 @@ $app->delete('/products/:id', function($id) {
     echoResponse(200, $rows);
 });
 
+$app->get('/producttypes', function() { 
+	$db = new DbHandler();
+	$rows = $db->getReportQueries("select producttypeid from producttype");
+    echoResponse(200, $rows);
+});
+
+$app->get('/regions', function() { 
+	$db = new DbHandler();
+	$rows = $db->getReportQueries("select regionid from region");
+    echoResponse(200, $rows);
+});
+
 //Orders Tab
 $app->get('/orders', function() { 
 	$db = new DbHandler();

@@ -16,8 +16,11 @@
             </form-element>
 			
 			<form-element label="PRODUCT TYPE" mod="product">
-                <input type="text" name="producttypeid" class="form-control" placeholder="PRODUCT TYPE" ng-model="product.producttypeid"  only-numbers required/>
-                <small class="errorMessage" ng-show="product_form.producttypeid.$dirty && product_form.producttypeid.$invalid"> Enter the product type id.</small>
+                <input type="text" name="producttypeid" class="form-control" placeholder="PRODUCT TYPE" ng-model="product.producttypeid" required disabled/>               
+				<select class="form-control" ng-model="product.producttypeid" ng-options="obj.producttypeid as obj.producttypeid for obj in producttypes">
+				  <option value="">-- Select --</option>
+				</select>
+				<small class="errorMessage" ng-show="product_form.producttypeid.$dirty && product_form.producttypeid.$invalid"> Enter the product type id.</small>
             </form-element>
 
             <form-element label="DESCRIPTION" mod="product">

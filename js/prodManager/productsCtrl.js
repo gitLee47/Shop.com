@@ -71,10 +71,19 @@ storeApp.controller('productsCtrl', function ($scope, $modal, $filter, Data, dat
     };
 	
     $scope.deleteProduct = function(product){
-        if(confirm("Are you sure to remove the product")){
+        if(confirm("Are you sure to remove the product?")){
             Data.delete("products/"+product.productid).then(function(result){
 				Data.toast(result);
                 $scope.products = _.without($scope.products, _.findWhere($scope.products, {id:product.productid}));
+            });
+        }
+    };
+	
+	$scope.deleteStore = function(store){
+        if(confirm("Are you sure to remove the store?")){
+            Data.delete("store/"+store.storeid).then(function(result){
+				Data.toast(result);
+                $scope.stores = _.without($scope.stores, _.findWhere($scope.stores, {id:store.storeid}));
             });
         }
     };

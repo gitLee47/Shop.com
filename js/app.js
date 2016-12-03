@@ -31,6 +31,16 @@ storeApp.config(['$routeProvider', function($routeProvider) {
 			templateUrl: 'partials/signup.html',
 			controller: 'authCtrl'
         }).
+		when('/Individual', {
+			title: 'Signup Individual',
+			templateUrl: 'partials/signup.html',
+			controller: 'authCtrl'
+        }).
+		when('/Business', {
+			title: 'Signup Business',
+			templateUrl: 'partials/signup.html',
+			controller: 'authCtrl'
+        }).
 		when('/dashboard', {
 			title: 'Dashboard',
 			templateUrl: 'partials/dashboard.html',
@@ -44,6 +54,11 @@ storeApp.config(['$routeProvider', function($routeProvider) {
 		when('/viewprofile', {
 			title: 'Your Orders',
 			templateUrl: 'partials/profile.html',
+			controller: 'authCtrl'
+        }).
+		when('/viewbusinessprofile', {
+			title: 'Your Orders',
+			templateUrl: 'partials/busprofile.html',
 			controller: 'authCtrl'
         }).
 		when('/', {
@@ -75,7 +90,7 @@ storeApp.config(['$routeProvider', function($routeProvider) {
                 } else {
 					$rootScope.name = results.name;
                     var nextUrl = next.$$route.originalPath;
-                    if (nextUrl == '/signup' || nextUrl == '/login') {
+                    if (nextUrl == '/signup' || nextUrl == '/login' || nextUrl == '/Business' || nextUrl == '/Individual') {
 
                     } else {
                         $location.path("/login");

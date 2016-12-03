@@ -12,7 +12,8 @@
 	<div id="navbar" class="navbar-collapse collapse">
 	  <ul class="nav navbar-nav navbar-right">
 		<li><a href="default.html#/store" title="Store"> Home </a></li>
-		<li><a href="default.html#/viewprofile" title="View Profile"> View Profile </a></li>
+		<li><a href="default.html#/viewprofile" title="View Profile" ng-hide="customer.custtype == 2"> View Profile </a></li>
+		<li><a href="default.html#/viewbusinessprofile" title="View Profile" ng-hide="customer.custtype == 1"> View Profile </a></li>
 		<li><a href="default.html#/vieworders" title="View Previous Orders"> View Past Orders </a></li>
 		<li><a ng-click="logout();"> Logout</a></li>
 	  </ul>
@@ -22,7 +23,7 @@
 <p class="text-info">
     Welcome to the Angular Store.<br /> 
     Please select the products you want and add them to your shopping cart.<br />
-    When you are done, click the shopping cart icon to review your order and check out.
+    When you are done, click the shopping cart icon to review your order and check out. 
 </p>
 
 

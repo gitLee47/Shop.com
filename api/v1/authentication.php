@@ -46,7 +46,7 @@ $app->post('/login', function() use ($app) {
         $response['email'] = $user['email'];
         $response['createdAt'] = $user['created'];
 	
-		$fulluser = $db->getOneRecord("select custid, name, addressid  from customer where userid='$uid'");
+		$fulluser = $db->getOneRecord("select custid, name, addressid, custtypeid  from customer where custid='$uid'");
 		$addressid = $fulluser["addressid"];
 		$useraddress = $db->getOneRecord("select * from address where addressid='$addressid'");
 		$name = $fulluser['name'];
@@ -54,6 +54,7 @@ $app->post('/login', function() use ($app) {
 		$response['uid'] = $uid;
 		$response['name'] = $name;
 		$response['logintypeid'] = $user['logintypeid'];
+		$response['custtype'] = $fulluser['custtypeid'];
 		$response['bldgnumber'] = $useraddress['bldgnumber'];
 		$response['street'] = $useraddress['street'];
 		$response['city'] = $useraddress['city'];
@@ -62,6 +63,20 @@ $app->post('/login', function() use ($app) {
 		$response['postalcode'] = $useraddress['postalcode'];
 		$response['password'] = $password;
 		$response['phone'] = $user['phone'];
+		$response['addressid'] = $addressid;
+		
+		if($fulluser['custtypeid'] == 1) {
+			$fulldemo = $db->getOneRecord("select * from individualdemo where custid='$uid'");
+			$response['sex'] = $fulldemo["sex"];
+			$response['married'] = $fulldemo["married"];
+			$response['income'] = $fulldemo["income"];
+		}
+		else if($fulluser['custtypeid'] == 2) {
+			$fulldemo = $db->getOneRecord("select * from businessdemo where custid='$uid'");
+			$response['businesstype'] = $fulldemo["businesstype"];
+			$response['income'] = $fulldemo["income"];
+		}
+		
         if (!isset($_SESSION)) {
             session_start();
         }
@@ -83,6 +98,7 @@ $app->post('/login', function() use ($app) {
         } 
     echoResponse(200, $response);
 });
+
 $app->post('/prodLogin', function() use ($app) {
     require_once 'passwordHash.php';
 	$r = json_decode($app->request->getBody());
@@ -157,26 +173,44 @@ $app->post('/signUp', function() use ($app) {
 	$logintypeid = $r->customer->logintypeid;
 	$addresstypeid = $r->customer->addresstypeid;
 	$custtypeid = $r->customer->custtypeid;
+
     $isUserExists = $db->getOneRecord("select 1 from login where phone='$phone' or email='$email'");
+	
     if(!$isUserExists){
         $r->customer->password = passwordHash::hash($password);
         $table_name = "login";
         $column_names = array('phone', 'email', 'password', 'logintypeid');
         $result_login = $db->insertIntoTable($r->customer, $column_names, $table_name);
+
         if ($result_login != NULL) {
             
             $response["uid"] = $result_login;
-			$r->customer->userid = $result_login; 
-			
+			$r->customer->custid = $result_login; 
+			$custid = $r->customer->custid;
 			$table_name = "address";
 			$column_names = array('bldgnumber', 'street', 'city', 'state', 'country', 'postalcode', 'addresstypeid');
 			$result_address = $db->insertIntoTable($r->customer, $column_names, $table_name);
 			$r->customer->addressid = $result_address; 
 			
 			$table_name = "customer";
-			$column_names = array('name', 'custtypeid', 'addressid', 'userid');
+			$column_names = array('custid','name', 'custtypeid', 'addressid');
 			$result_customer = $db->insertIntoTable($r->customer, $column_names, $table_name);
-			if(result_customer != NULL) {
+			
+			$isUserCreated = $db->getOneRecord("select custid from customer where custid='$custid'");
+			//echoResponse(200, $isUserCreated);
+			if($isUserCreated != NULL) {
+				
+				if($custtypeid == 1) {
+					$table_name = "individualdemo";
+					$column_names = array('custid','sex','married','income');
+					$result_demo = $db->insertIntoTable($r->customer, $column_names, $table_name);
+					
+				}
+				else if( $custtypeid == 2) {
+					$table_name = "businessdemo";
+					$column_names = array('custid','businesstype', 'income');
+					$result_demo = $db->insertIntoTable($r->customer, $column_names, $table_name);
+				}
 				$response["status"] = "success";
 				$response["message"] = "User account created successfully";
 				
@@ -187,7 +221,7 @@ $app->post('/signUp', function() use ($app) {
 				$_SESSION['phone'] = $phone;
 				$_SESSION['name'] = $name;
 				$_SESSION['email'] = $email;
-				echoResponse(200, $response);
+				echoResponse(200, $response); 
 			}
 			else {
 				$response["status"] = "error";
@@ -205,6 +239,64 @@ $app->post('/signUp', function() use ($app) {
         echoResponse(201, $response);
     }
 });
+
+$app->put('/updateprofile', function() use ($app) {
+    $response = array();
+    $r = json_decode($app->request->getBody());
+    verifyRequiredParams(array('email', 'name', 'password'),$r->customer);
+    require_once 'passwordHash.php';
+    $db = new DbHandler();
+    $phone = $r->customer->phone;
+    $name = $r->customer->name;
+    $email = $r->customer->email;
+    $password = $r->customer->password;
+	$bldgnumber = $r->customer->bldgnumber;
+	$street = $r->customer->street;
+	$city = $r->customer->city;
+	$state = $r->customer->state;
+	$country = $r->customer->country;
+	$postalcode = $r->customer->postalcode;
+	$logintypeid = $r->customer->logintypeid;
+	$custtype = $r->customer->custtype;
+	$custid = $r->customer->custid;
+	
+    $isUserExists = $db->getOneRecord("select 1 from login where (phone='$phone' and userid <> '$custid')or (email='$email' and userid <> '$custid')" );
+	
+    if(!$isUserExists){
+        $r->customer->password = passwordHash::hash($password);
+		$condition = array('userid'=>$custid);
+		$mandatory = array();	
+		$data = array('email' => $email, 'password'=>$r->customer->password, 'phone'=>$phone);
+		$rows = $db->update("login", $data, $condition, $mandatory);
+        
+		$data = $r->customer;
+		$condition = array('addressid'=>$data->addressid);
+		$addressdata =  array('bldgnumber'=>$data->bldgnumber,'street'=>$data->street,'city'=>$data->city,'state'=>$data->state,'country'=>$data->country,'postalcode'=>$data->postalcode);
+		
+		$rows = $db->update("address", $addressdata, $condition, $mandatory);
+		
+		$condition = array('custid'=>$data->custid);
+		
+		if($custtype == 1) {
+			$demodata =  array('sex'=>$data->sex,'married'=>$data->married,'income'=>$data->income);
+			$drows = $db->update("individualdemo", $demodata, $condition, $mandatory);
+		}
+		else if($custtype == 2){
+			$demodata =  array('businesstype'=>$data->businesstype,'income'=>$data->income);
+			$drows = $db->update("businessdemo", $demodata, $condition, $mandatory);
+		}
+		if($drows != null) {
+			$response["status"] = "success";
+			$response["message"] = "User account updated successfully";		
+		}
+		echoResponse(200, $response);
+    }else{
+        $response["status"] = "error";
+        $response["message"] = "A user with the provided phone or email exists!";
+        echoResponse(201, $response);
+    }
+});
+
 $app->get('/logout', function() {
     $db = new DbHandler();
     $session = $db->destroySession();
@@ -385,6 +477,14 @@ $app->get('/stores', function() {
 	$db = new DbHandler();
 	$rows = $db->getReportQueries("select storeid,numsalespersons,s.addressid,producttype,regionid,bldgnumber,street,city,state,country,postalcode  
 from store s, address a where a.addressid = s.addressid;");
+    echoResponse(200, $rows);
+});
+
+$app->delete('/store/:id', function($id) { 
+    $db = new DbHandler();
+    $rows = $db->delete("store", array('storeid'=>$id));
+    if($rows["status"]=="success")
+        $rows["message"] = "Store removed successfully.";
     echoResponse(200, $rows);
 });
 

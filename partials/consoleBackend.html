@@ -144,7 +144,7 @@
 												<td style="width:100px">
 													<div class="btn-group">
 													  <button type="button" class="btn btn-default fa fa-edit" ng-click="openStore(s);"></button>
-													  <button type="button" class="btn btn-danger fa fa-trash-o" ng-click="deleteProduct(s);"></button>
+													  <button type="button" class="btn btn-danger fa fa-trash-o" ng-click="deleteStore(s);"></button>
 													</div>
 												</td>
 											</tr>
@@ -152,6 +152,43 @@
 										</div>
 										</div>
 							</div>
+							
+						</div>
+						<div class="tab-pane fade" id="Admiin">
+							<h4 class="blog-post-title">Admin Console</h4>
+										<hr/>
+										<div class="table-responsive">
+										<div class="panel panel-primary">
+										  <div class="panel-heading">Welcome God!!
+											  <div class="sw-search" >
+													<div class="nav-search" id="nav-search">
+															Filter: <span class="input-icon">
+																<input placeholder="Filter orders list ..." class="nav-search-input" ng-model="filterOrders" ng-change="resetLimit();"  autocomplete="on" type="text" style="width:300px;" focus>
+																<i class="search-icon fa fa-search nav-search-icon"></i>
+															</span>
+													</div>
+												</div>
+											</div>
+										<div class="panel-body">
+											<table class="table table-striped">
+											<tr ng-show="orders.length==0"><td style="vertical-align:middle;"><i class="fa fa-ban fa-3x"></i>&nbsp;No data found</td></tr>
+											<tr ng-hide="orders.length>-1"><td style="vertical-align:middle;"><i class="fa fa-cog fa-3x fa-spin"></i>&nbsp;Loading</td></tr>
+											
+											<tr><th ng-repeat="c in oColumns">{{c.text}}</th></tr>
+
+											<tr ng-repeat="o in orders | filter:filterOrders | orderBy:'dateordered'" id="{{o.orderid}}"  ng-animate="'animate'">
+												<td>{{o.orderid}}</td>
+												<td>{{o.custid}}</td>		
+												<td>{{o.total}}</td>
+												<td>{{o.dateordered}}</td>
+												<td>
+													<button class="btn" ng-class="{Approved:'btn-success', NotApproved:''}[o.status]" ng-click="changeOrderStatus(o);">{{o.status}}</button>
+												</td>
+											</tr>
+											</table>
+										</div>
+										</div>
+										</div>
 							
 						</div>
 					</div>

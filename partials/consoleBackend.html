@@ -108,6 +108,28 @@
 										<h3>Total Orders</h3>
 										{{orders.totorders}}
 									</td>
+									<td ng-repeat="avg in avgqnty">
+										<h3>Average Quantity per Order</h3>
+										{{avg.avgqnty}}
+									</td>
+									<td>
+										<h3>Products Most Sold</h3>
+										<p ng-repeat="prod in maxprods">
+										{{prod.productname}}
+										</p>
+									</td>
+									<td>
+										<h3>Products Least Sold</h3>
+										<p ng-repeat="prod in minprods">
+										{{prod.productname}}
+										</p>
+									</td>
+								</tr>
+								<tr>
+									<td ng-repeat="cust in mvcust">
+										<h3>Most Valuable Customer</h3>
+										{{cust.name}}
+									</td>
 								</tr>
 							</table>
 							<button type="button" class="btn btn-danger fa fa-plus" ng-click="openStore(store);">&nbsp;Add New Store</button>

@@ -352,7 +352,7 @@ $app->post('/order', function() use ($app) {
 	$result_order_tab = $db->insertIntoTable($vals, $column_names, $table_name);
 	
 	foreach($r->order as $obj){
-		$column_names = array('orderid', 'productid', 'producttypeid', 'quantity');
+		$column_names = array('orderid', 'productid', 'quantity');
 		$table_name = "order_items";
 		$sku = $obj->item_number;
 		$product = $db->getOneRecord("select productid, stock from products_new where sku='$sku'");
@@ -470,6 +470,39 @@ $app->get('/totsales', function() {
 $app->get('/totorders', function() { 
 	$db = new DbHandler();
 	$rows = $db->getReportQueries("select count(orderid) as totorders from orders");
+    echoResponse(200, $rows);
+});
+
+$app->get('/avgqnty', function() { 
+	$db = new DbHandler();
+	$rows = $db->getReportQueries("select avg(x.avgqnty) as avgqnty from (select avg(quantity) as avgqnty from order_items group by orderid)x");
+    echoResponse(200, $rows);
+});
+
+$app->get('/maxSold', function() { 
+	$db = new DbHandler();
+	$rows = $db->getReportQueries("select productname from products_new where productid in 
+									(select productid from order_items group by productid having sum(quantity) = 
+										(select  distinct max(quantity) as maxprod from order_items group by productid))");
+    echoResponse(200, $rows);
+});
+
+$app->get('/minSold', function() { 
+	$db = new DbHandler();
+	$rows = $db->getReportQueries("select productname from products_new where productid in 
+									(select productid from order_items group by productid having sum(quantity) = 
+										(select  distinct min(quantity) from order_items group by productid))");
+    echoResponse(200, $rows);
+});
+
+$app->get('/mvcust', function() { 
+	$db = new DbHandler();
+	$rows = $db->getReportQueries("select name from customer where custid = (select custid from orders o  where orderid in 
+									( select orderid from order_items group by orderid having sum(quantity) = 
+										(select  distinct max(quantity) as maxprod from order_items group by orderid))
+									and custid in 
+									( select custid from orders group by custid having sum(total) = 
+										(select distinct max(x.sumtot) from (select sum(total) as sumtot from orders group by custid) x)))");
     echoResponse(200, $rows);
 });
 

@@ -54,6 +54,22 @@ storeApp.controller('productsCtrl', function ($scope, $modal, $filter, Data, dat
 		Data.get('totorders').then(function(data){
 			$scope.totorders = data;
 		});
+		
+		Data.get('avgqnty').then(function(data){
+			$scope.avgqnty = data;
+		});
+		
+		Data.get('maxSold').then(function(data){
+			$scope.maxprods = data;
+		});
+		
+		Data.get('minSold').then(function(data){
+			$scope.minprods = data;
+		});
+		
+		Data.get('mvcust').then(function(data){
+			$scope.mvcust = data;
+		});
 	}
 	//console.log($scope.producttypes);
     $scope.changeProductStatus = function(product){

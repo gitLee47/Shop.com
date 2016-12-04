@@ -43,8 +43,9 @@
                                 <label class="col-sm-5 control-label no-padding-right" for="password">Password</label>
                                 <div class="col-sm-7">
                                     <span class="block input-icon input-icon-right">
-                                <input type="password" class="form-control" name = "password" placeholder="Password" ng-model="signup.password" required/>
-                                <small class="errorMessage" data-ng-show="signupForm.password.$dirty && signupForm.password.$invalid"> Enter Password.</small>
+                                <input type="password" class="form-control" name = "password" placeholder="Password" ng-model="signup.password" ng-pattern="/^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/" required/>
+                                <small class="errorMessage" data-ng-show="signupForm.password.$error.pattern && signupForm.password.$dirty && signupForm.password.$invalid"> Password should be atleast 8 characters long
+									and should contain one number,one character and one special character</small>
                             </span>
                                 </div>
                             </div>
@@ -181,8 +182,9 @@
                                 <label class="col-sm-5 control-label no-padding-right" for="password">Password</label>
                                 <div class="col-sm-7">
                                     <span class="block input-icon input-icon-right">
-                                <input type="password" class="form-control" name = "password" placeholder="Password" ng-model="signup.password" required/>
-                                <small class="errorMessage" data-ng-show="signupForm2.password.$dirty && signupForm2.password.$invalid"> Enter Password.</small>
+                                <input type="password" class="form-control" name = "password" placeholder="Password" ng-model="signup.password" ng-pattern="/^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/" required/>
+                                <small class="errorMessage" data-ng-show="signupForm2.password.$error.pattern && signupForm2.password.$dirty && signupForm2.password.$invalid"> Password should be atleast 8 characters long
+									and should contain one number,one character and one special character</small>
                             </span>
                                 </div>
                             </div>

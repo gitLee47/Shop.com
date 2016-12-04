@@ -70,6 +70,16 @@ storeApp.controller('productsCtrl', function ($scope, $modal, $filter, Data, dat
 		Data.get('mvcust').then(function(data){
 			$scope.mvcust = data;
 		});
+		
+		Data.get('mvindcust').then(function(data){
+			console.log(data);
+			$scope.mvindcust = data;
+		});
+		
+		Data.get('mvbuscust').then(function(data){
+			console.log(data);
+			$scope.mvbuscust = data;
+		});
 	}
 	//console.log($scope.producttypes);
     $scope.changeProductStatus = function(product){

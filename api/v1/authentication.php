@@ -491,7 +491,7 @@ $app->get('/maxSold', function() {
 	$db = new DbHandler();
 	$rows = $db->getReportQueries("select productname from products_new where productid in 
 									(select productid from order_items group by productid having sum(quantity) = 
-										(select  distinct max(quantity) as maxprod from order_items group by productid))");
+										(select  distinct max(x.maxprod)  from (select sum(quantity) as maxprod from order_items group by productid)x ))");
     echoResponse(200, $rows);
 });
 
@@ -499,18 +499,37 @@ $app->get('/minSold', function() {
 	$db = new DbHandler();
 	$rows = $db->getReportQueries("select productname from products_new where productid in 
 									(select productid from order_items group by productid having sum(quantity) = 
-										(select  distinct min(quantity) from order_items group by productid))");
+										(select  distinct min(x.minprod)  from (select sum(quantity) as minprod from order_items group by productid)x ))");
     echoResponse(200, $rows);
 });
 
 $app->get('/mvcust', function() { 
 	$db = new DbHandler();
-	$rows = $db->getReportQueries("select name from customer where custid = (select custid from orders o  where orderid in 
+	$rows = $db->getReportQueries("select name, ct.customertype from customer c, customertype ct where c.custtypeid = ct.customertypeid 
+									and custid = (select custid from orders o  where orderid in 
 									( select orderid from order_items group by orderid having sum(quantity) = 
-										(select  distinct max(quantity) as maxprod from order_items group by orderid))
+										(select  distinct max(x.maxqnty) from (select sum(quantity) as maxqnty from order_items group by orderid)x ))
 									and custid in 
-									( select custid from orders group by custid having sum(total) = 
+									( select custid from orders group by custid having sum(total) in
 										(select distinct max(x.sumtot) from (select sum(total) as sumtot from orders group by custid) x)))");
+    echoResponse(200, $rows);
+});
+
+$app->get('/mvindcust', function() { 
+	$db = new DbHandler();
+	$rows = $db->getReportQueries("select distinct c.name  from orders o, customer c where o.custid = c.custid and orderid in ( select o.orderid from order_items oi, orders o, customer c 
+									 where o.orderid = oi.orderid and o.custid = c.custid and c.custtypeid = 1 group by oi.orderid having sum(quantity) = 
+											(select  distinct max(x.maxqnty) from (select sum(quantity) as maxqnty, orderid as oid from order_items group by orderid)x where x.oid = o.orderid));
+									  ");
+    echoResponse(200, $rows);
+});
+
+$app->get('/mvbuscust', function() { 
+	$db = new DbHandler();
+	$rows = $db->getReportQueries("select distinct c.name  from orders o, customer c where o.custid = c.custid and orderid in ( select o.orderid from order_items oi, orders o, customer c 
+									 where o.orderid = oi.orderid and o.custid = c.custid and c.custtypeid = 2 group by oi.orderid having sum(quantity) = 
+											(select  distinct max(x.maxqnty) from (select sum(quantity) as maxqnty, orderid as oid from order_items group by orderid)x where x.oid = o.orderid));
+									  ");
     echoResponse(200, $rows);
 });
 

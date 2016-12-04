@@ -128,7 +128,16 @@
 								<tr>
 									<td ng-repeat="cust in mvcust">
 										<h3>Most Valuable Customer</h3>
-										{{cust.name}}
+										<p><b>Name:</b> {{cust.name}}<p>
+										<p><b>Customer Type:</b> {{cust.customertype}}<p>
+									</td>
+									<td ng-repeat="cust in mvindcust">
+										<h3>Most Valuable Individual Customer</h3>
+										<p><b>Name:</b> {{cust.name}}<p>
+									</td>
+									<td ng-repeat="cust in mvbuscust">
+										<h3>Most Valuable Business Customer</h3>
+										<p><b>Name:</b> {{cust.name}}<p>
 									</td>
 								</tr>
 							</table>

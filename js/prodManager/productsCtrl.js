@@ -2,6 +2,7 @@ storeApp.controller('productsCtrl', function ($scope, $modal, $filter, Data, dat
     $scope.product = {};
 	$scope.store = {};
 	$scope.producttypes = [];
+	console.log($scope.uid);
 	if(sessionStorage.getItem('prodlogin') == null || sessionStorage.getItem('prodlogin') == "undefined" || sessionStorage.getItem('prodlogin') == "null"){
 		//console.log("Hello");
 		$scope.prodlogin = dataSharingService.getCustomer()[0];
@@ -30,6 +31,10 @@ storeApp.controller('productsCtrl', function ($scope, $modal, $filter, Data, dat
 			$scope.orders = data.data;
 		});	
 		
+		Data.get('ordersApproved').then(function(data){
+			$scope.ordersApp = data.data;
+		});	
+		
 		Data.get('producttypes').then(function(data){
 			//$scope.stores = data;
 			//console.log(data);
@@ -38,7 +43,7 @@ storeApp.controller('productsCtrl', function ($scope, $modal, $filter, Data, dat
 		
 		Data.get('regions').then(function(data){
 			//$scope.stores = data;
-			console.log(data);
+			//console.log(data);
 			dataSharingService.addRegionIds(data);
 		});
 		
@@ -72,12 +77,10 @@ storeApp.controller('productsCtrl', function ($scope, $modal, $filter, Data, dat
 		});
 		
 		Data.get('mvindcust').then(function(data){
-			console.log(data);
 			$scope.mvindcust = data;
 		});
 		
 		Data.get('mvbuscust').then(function(data){
-			console.log(data);
 			$scope.mvbuscust = data;
 		});
 	}
@@ -91,7 +94,7 @@ storeApp.controller('productsCtrl', function ($scope, $modal, $filter, Data, dat
 	
 	$scope.changeOrderStatus = function(order){
         order.status = (order.status=="NotApproved" ? "Approved" : "Approved");
-        Data.put("orders/"+order.orderid,{status:order.status}).then(function(results){
+        Data.put("orders/"+order.orderid,{status:order.status, approvedby:$scope.uid}).then(function(results){
 			Data.toast(results);
 		});
     };
@@ -113,6 +116,20 @@ storeApp.controller('productsCtrl', function ($scope, $modal, $filter, Data, dat
             });
         }
     };
+	
+	$scope.addProdType = function(producttype){
+		 Data.post('producttype', producttype).then(function (result) {
+			Data.toast(result);
+		 });
+	}
+	
+	$scope.addCustomerType = function(custtype){
+		 Data.post('customertype', custtype).then(function (result) {
+			Data.toast(result);
+		 });
+	}
+	
+	
 	
     $scope.open = function (p,size) {
         var modalInstance = $modal.open({

@@ -451,6 +451,13 @@ $app->get('/orders', function() {
     echoResponse(200, $rows);
 });
 
+$app->get('/ordersApproved', function() { 
+	$db = new DbHandler();
+	$condition = array('status'=>'Approved');
+	$rows = $db->select("orders","orderid,custid,total,dateordered,status,approvedby",$condition);
+    echoResponse(200, $rows);
+});
+
 $app->get('/orders/:id', function($id) {
 	$db = new DbHandler();
     $rows = $db->select("products_new","productid,producttypeid,sku,productname,description,price,stock,color,cal,carot,itc,folate,potassium,fiber,status", array('producttypeid'=>$id));
@@ -585,6 +592,45 @@ $app->post('/stores', function() use ($app) {
 		$rows["message"] = "Store added successfully.";
 	
     echoResponse(200, $rows);
+});
+
+//Admin
+$app->post('/producttype', function() use ($app) { 
+    $data = json_decode($app->request->getBody());
+    $db = new DbHandler();
+	$column_names = array('producttype');
+	
+    $rows = $db->insertIntoTable($data, $column_names, "producttype");
+
+    if($rows > 0 ) {
+		$response["status"]= "success";
+        $response["message"] = "Product type added successfully.";
+	}
+	else {
+		$response["status"]= "error";
+        $response["message"] = "Product type not added.";
+	}
+	
+    echoResponse(200, $response);
+});
+
+$app->post('/customertype', function() use ($app) { 
+    $data = json_decode($app->request->getBody());
+    $db = new DbHandler();
+	$column_names = array('customertype');
+	
+    $rows = $db->insertIntoTable($data, $column_names, "customertype");
+
+    if($rows > 0 ) {
+		$response["status"]= "success";
+        $response["message"] = "Customer type added successfully.";
+	}
+	else {
+		$response["status"]= "error";
+        $response["message"] = "Customer type not added.";
+	}
+	
+    echoResponse(200, $response);
 });
 
 ?>

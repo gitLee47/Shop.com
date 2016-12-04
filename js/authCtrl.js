@@ -77,6 +77,10 @@ storeApp.controller('authCtrl', function ($scope, $rootScope, $routeParams, $loc
 		sessionStorage.clear();
         Data.get('logout').then(function (results) {
             Data.toast(results);
+			var form = $('<form/></form>');
+			$("body").append(form);
+			form.submit();
+			form.remove();
             $location.path('login');
         });
     };

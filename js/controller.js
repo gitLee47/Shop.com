@@ -3,7 +3,7 @@
 // the storeController contains two objects:
 // - store: contains the product list
 // - cart: the shopping cart object
-storeApp.controller('storeController', function($scope, $rootScope, $routeParams, $location, $http, Data, DataService, dataSharingService) {
+storeApp.controller('storeController', function($scope, $rootScope, $modal, $routeParams, $location, $http, Data, DataService, dataSharingService) {
 
     // get store and cart from service
     $scope.store = DataService.store;
@@ -64,18 +64,38 @@ storeApp.controller('storeController', function($scope, $rootScope, $routeParams
 	
 	$scope.orders = {};
 	var orderitems = [];
-	console.log($scope.customer.custid);
+	//console.log($scope.customer.custid);
 	Data.get('getOrders/'+$scope.customer.custid).then(function(data){
-		console.log(data);
-		//for(var i=0 ; i <data.data.length; i++) {
-		//	orderitems.push(new product(data.data[i]["custid"],data.data[i]["dateordered"],data.data[i]["orderid"], data.data[i]["status"], data.data[i]["total"]));
-		//}
+		var form = $('<form/></form>');
+		$("body").append(form);
+		form.submit();
+		form.remove();
 		$scope.orders = data;
 		
 	});
 	
+	 $scope.getOrderDetails = function(order){
+        Data.get("getOrderDetail/"+order.orderid).then(function(results){
+			console.log(results);
+			$scope.open(results, 50);
+		});
+    };
+	
+	$scope.open = function (p,size) {
+        var modalInstance = $modal.open({
+          templateUrl: 'partials/orderDetails.html',
+          controller: 'orderDetailController',
+          size: size,
+          resolve: {
+            item: function () {
+              return p;
+            }
+          }
+        });
+	}
+	
 	$scope.oColumns = [
-				{text:"ID",predicate:"id",sortable:true,dataType:"number"},
+				{text:"OrderID (Click for Details)",predicate:"id",sortable:true,dataType:"number"},
 				{text:"CustomerID",predicate:"custid",sortable:true,dataType:"number"},             
 				{text:"Total Amount",predicate:"total",sortable:true, dataType:"number"},
 				{text:"Date Ordered",predicate:"dateordered",sortable:true},
@@ -83,4 +103,8 @@ storeApp.controller('storeController', function($scope, $rootScope, $routeParams
 	];
 	
 	$scope.orderBySel = [{ value: "price", name: "Cheapest" }, { value: "-price", name: "Costliest" }];
+});
+
+storeApp.controller('orderDetailController', function ($scope, $modalInstance, item) { 
+ $scope.order = item;
 });

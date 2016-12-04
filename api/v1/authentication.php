@@ -366,7 +366,8 @@ $app->post('/order', function() use ($app) {
 			$result_update_product = $db->update($table_name, array('stock'=>$stock ),array('productid'=>$prodid));
 		}
 	}
-	echoResponse(200,$obj);
+	
+	echoResponse(200,$result_update_product);
 });
 
 //Customer
@@ -374,6 +375,13 @@ $app->get('/getOrders/:id', function($id) {
 	$db = new DbHandler();
 	//$rows = $db->select("orders","orderid,custid,total,dateordered,status",$condition);
 	$rows = $db->getReportQueries("select * from orders where custid = '$id'");
+    echoResponse(200, $rows);
+});
+
+$app->get('/getOrderDetail/:id', function($id) { 
+	$db = new DbHandler();
+	//$rows = $db->select("orders","orderid,custid,total,dateordered,status",$condition);
+	$rows = $db->getReportQueries("select oi.productid, p.productname, oi.quantity from order_items oi, products_new p where orderid = '$id' and oi.productid = p.productid");
     echoResponse(200, $rows);
 });
 

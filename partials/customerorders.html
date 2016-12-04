@@ -43,7 +43,7 @@
 	<tr><th ng-repeat="c in oColumns">{{c.text}}</th></tr>
 
 	<tr ng-repeat="o in orders | filter:filterOrders | orderBy:'dateordered'" id="{{o.orderid}}"  ng-animate="'animate'">
-		<td>{{o.orderid}}</td>
+		<td><a ng-click="getOrderDetails(o)"><b>{{o.orderid}}</b></a></td>
 		<td>{{o.custid}}</td>		
 		<td>{{o.total}}</td>
 		<td>{{o.dateordered}}</td>

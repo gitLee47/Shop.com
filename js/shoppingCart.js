@@ -185,9 +185,16 @@ obj.shoppingCart.prototype.checkoutMySQL = function (parms, clearCart) {
             order: data
         }).then(function (results) {
             Data.toast(results);
-			Data.showOrderDetails(results);
+			//Data.showOrderDetails(results);
+			//console.log(results);
+			//var form = $('<form/></form>');
+			//$("body").append(form);
+			// submit form and clear cart
+			this.clearCart = clearCart == null || clearCart;
+			//form.submit();
+			//form.remove();
             if (results.status == "success") {
-                $location.path('store');
+                $location.path('/vieworders');
             }
         });
 		

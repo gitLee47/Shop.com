@@ -22,6 +22,7 @@
 <div class="container-fluid">
   <div class="row">
 	<div class="col-md-3">
+	<div class="panel panel-info">
 		<div class="row placeholders">
 		  <div class="col-md-12 placeholder">
 			  <img src="img/user.png" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
@@ -67,6 +68,7 @@
 				  <div class="media-body animated fadeInRight"><b>{{customer.bldgnumber}} {{customer.street}} {{customer.city}}</b></div>
 				</article>
 			</div>
+		</div>
 		</div>
 	</div>
 	<div class="col-md-9 main">
@@ -133,12 +135,12 @@
                                 <label class="col-sm-5 control-label no-padding-right" for="address">Address Line 1</label>
                                 <div class="col-sm-4">
 								<span class="block input-icon input-icon-right">
-                                <input type="text" class="form-control" placeholder="Street" ng-model="customer.street" />
+                                <input type="text" class="form-control" placeholder="Street" ng-model="customer.street" required/>
 								</span>
 								</div>
 								<div class="col-sm-3">
 								<span class="block input-icon input-icon-right">
-                                <input type="text" class="form-control" placeholder="Apt/Bldg" ng-model="customer.bldgnumber" />
+                                <input type="text" class="form-control" placeholder="Apt/Bldg" ng-model="customer.bldgnumber" required/>
 								</span>
 								</div>
                             </div>
@@ -173,7 +175,7 @@
 								</div>
 								<div class="col-sm-3">
 								<span class="block input-icon input-icon-right">
-                                <input type="text" class="form-control" placeholder="zip" ng-model="customer.postalcode" />
+                                <input type="text" class="form-control" placeholder="zip" ng-model="customer.postalcode" required/>
 								</span>
 								</div>
                             </div>

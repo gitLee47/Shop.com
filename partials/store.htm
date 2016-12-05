@@ -21,7 +21,7 @@
   </div>
 </nav>
 <p class="text-info">
-    Welcome to the Angular Store.<br /> 
+    Welcome to YourBasket.com. Your online grocery store<br /> 
     Please select the products you want and add them to your shopping cart.<br />
     When you are done, click the shopping cart icon to review your order and check out. 
 </p>
@@ -37,8 +37,8 @@
 	</select> -->
 	<select ng-init="orderList = options[0].value" ng-model="orderList" ng-options="obj.value as obj.name for obj in orderBySel"></select>
 </p>
-
-<table class="table table-bordered">
+<div class="panel panel-primary">
+<table class="table table-striped  table-bordered">
     <tr class="well">
         <td class="tdRight" colspan="5" >
             <a href="default.html#/cart" title="go to shopping cart" ng-disabled="cart.getTotalCount() < 1">
@@ -91,3 +91,4 @@
         </td>
     </tr>
 </table>
+</div>

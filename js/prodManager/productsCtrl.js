@@ -150,7 +150,8 @@ storeApp.controller('productsCtrl', function ($scope, $modal, $filter, Data, dat
                 p.description = selectedObject.description;
                 p.price = selectedObject.price;
                 p.stock = selectedObject.stock;
-                p.packing = selectedObject.packing;
+                p.carot = selectedObject.carot;
+				p.cal = selectedObject.cal;
             }
         });
     };
@@ -245,7 +246,7 @@ storeApp.controller('productEditCtrl', function ($scope, $modalInstance, item, D
             //product.uid = $scope.uid;
             if(product.productid> 0){
                 Data.put('products/'+product.productid, product).then(function (result) {
-					
+					Data.toast(result);
                     if(result.status != 'error'){
                         var x = angular.copy(product);
                         x.save = 'update';

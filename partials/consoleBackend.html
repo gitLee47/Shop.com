@@ -36,7 +36,7 @@
 											
 											<tr><th ng-repeat="c in columns">{{c.text}}</th></tr>
 
-											<tr ng-repeat="c in products | filter:filterProduct | orderBy:'-productid'" id="{{c.productid}}" animate-on-change='c.stock + c.price + c.description' ng-animate="'animate'">
+											<tr ng-repeat="c in products | filter:filterProduct | orderBy:'-productid'" id="{{c.productid}}" animate-on-change='c.stock + c.price + c.description + c.cal + c.carot' ng-animate="'animate'">
 												<td>{{c.productid}}</td><td>{{c.producttypeid}}</td><td>{{c.productname}}</td><td>{{c.sku}}</td><td>{{c.price}}</td><td>{{c.stock}}</td><td>{{c.description}}</td>
 												<td>{{c.cal}}</td>
 												<td>{{c.carot}}</td>
@@ -110,8 +110,8 @@
 											</div>
 										<div class="panel-body">
 											<table class="table table-striped">
-											<tr ng-show="orders.length==0"><td style="vertical-align:middle;"><i class="fa fa-ban fa-3x"></i>&nbsp;No data found</td></tr>
-											<tr ng-hide="orders.length>-1"><td style="vertical-align:middle;"><i class="fa fa-cog fa-3x fa-spin"></i>&nbsp;Loading</td></tr>
+											<tr ng-show="ordersApp.length==0"><td style="vertical-align:middle;"><i class="fa fa-ban fa-3x"></i>&nbsp;No data found</td></tr>
+											<tr ng-hide="ordersApp.length>-1"><td style="vertical-align:middle;"><i class="fa fa-cog fa-3x fa-spin"></i>&nbsp;Loading</td></tr>
 											
 											<tr><th ng-repeat="c in oColumns">{{c.text}}</th><th>Approved By<th></tr>
 
@@ -137,7 +137,7 @@
 								<tr>
 									<td ng-repeat="sales in totsales">
 										<h3>Total Sales</h3>
-										{{sales.totalsales}}
+										{{sales.totalsales}} $
 									</td>
 									<td ng-repeat="orders in totorders">
 										<h3>Total Orders</h3>

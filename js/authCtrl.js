@@ -81,7 +81,7 @@ storeApp.controller('authCtrl', function ($scope, $rootScope, $routeParams, $loc
 			$("body").append(form);
 			form.submit();
 			form.remove();
-            $location.path('login');
+            $window.location.href = ('/login');
         });
     };
 	

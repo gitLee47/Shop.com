@@ -175,9 +175,34 @@
 								</div>
 								<div class="col-sm-3">
 								<span class="block input-icon input-icon-right">
-                                <input type="text" class="form-control" placeholder="zip" ng-model="customer.postalcode" required/>
+                                <input type="text" class="form-control" placeholder="zip" name="zip" ng-model="customer.postalcode" ng-pattern="/^(\d{5}([\-]\d{4})?)$/" required/>
+								<span ng-show="signupForm.zip.$error.pattern" class="help-inline">Enter valid postalcode eg "94105-0011" or "94105"</span>
 								</span>
 								</div>
+                            </div>
+							<div class="form-group">
+								<label class="col-sm-5 control-label no-padding-right"> Gender </label>
+								<div class="col-sm-7">
+									<label class="radio-inline"><input type="radio" name='group' ng-model="customer.sex" value="M" required>Male</label>
+									<label class="radio-inline"><input type="radio" name='group' ng-model="customer.sex" value="F" required>Female</label>
+									<label class="radio-inline"><input type="radio" name='group' ng-model="customer.sex" value="NS" required>Not Specified</label>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-5 control-label no-padding-right"> Married </label>
+								<div class="col-sm-7">
+									<label class="radio-inline"><input type="radio" name='group2' ng-model="customer.married" value="Yes" required>Yes</label>
+									<label class="radio-inline"><input type="radio" name='group2' ng-model="customer.married" value="No" required>No</label>
+									<label class="radio-inline"><input type="radio" name='group2' ng-model="customer.married" value="NS" required>Not Specified</label>
+								</div>
+							</div>
+							<div class="form-group">
+                                <label class="col-sm-5 control-label no-padding-right" for="Income">Income</label>
+                                <div class="col-sm-7">
+									<span class="block input-icon input-icon-right">
+										<input type="text" class="form-control" placeholder="Income" ng-model="customer.income" only-numbers/>
+									</span>
+                                </div>
                             </div>
 							<div class="form-group">
                                 <span class="lbl col-sm-5"> </span>

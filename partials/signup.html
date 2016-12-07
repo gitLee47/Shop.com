@@ -121,7 +121,8 @@
 								</div>
 								<div class="col-sm-3">
 								<span class="block input-icon input-icon-right">
-                                <input type="text" class="form-control" placeholder="zip" ng-model="signup.postalcode" required/>
+                                <input type="text" class="form-control" placeholder="zip" name="zip" ng-model="signup.postalcode" ng-pattern="/^(\d{5}([\-]\d{4})?)$/" required/>
+								<span ng-show="signupForm.zip.$error.pattern" class="help-inline">Enter valid postalcode eg "94105-0011" or "94105"</span>
 								</span>
 								</div>
                             </div>
@@ -260,7 +261,8 @@
 								</div>
 								<div class="col-sm-3">
 								<span class="block input-icon input-icon-right">
-                                <input type="text" class="form-control" placeholder="zip" ng-model="signup.postalcode" required/>
+                                <input type="text" class="form-control" placeholder="zip" name="zip" ng-model="signup.postalcode" ng-pattern="/^(\d{5}([\-]\d{4})?)$/" required/>
+								<span ng-show="signupForm2.zip.$error.pattern" class="help-inline">Enter valid postalcode eg "94105-0011" or "94105"</span>
 								</span>
 								</div>
                             </div>
